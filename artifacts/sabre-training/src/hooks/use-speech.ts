@@ -60,7 +60,7 @@ const AUDIO_SUBFOLDER: Record<string, string> = {
   zurueck: 'training',
   ausfall: 'training',
   quart: 'training',
-  oktav: 'training',
+  terz: 'training',
   quint: 'training',
   riposte: 'training',
   balestra: 'training',

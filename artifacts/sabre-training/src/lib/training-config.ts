@@ -14,7 +14,7 @@ export const MOVE_DISPLACEMENT: Partial<Record<MoveType, number>> = {
   ausfall: 1,
   zurueck: -1,
   quart: 0,
-  oktav: 0,
+  terz: 0,
   quint: 0,
   riposte: 0,
   engarde: 0,
@@ -49,7 +49,7 @@ export const COOLDOWN_EXERCISE_LIST: CooldownMove[] = [
 export const TRAINING_CONFIGS: Record<string, TrainingConfig> = {
   complete: {
     // Uses all fencing moves in main phase; warmup/cooldown phases use exercise lists
-    defaultMoves: ['vor', 'zurueck', 'ausfall', 'quart', 'oktav', 'quint', 'riposte', 'balestra'],
+    defaultMoves: ['vor', 'zurueck', 'ausfall', 'quart', 'terz', 'quint', 'riposte', 'balestra'],
     defaultPauseSeconds: 3,
     isDrill: false,
     isCombination: false,
@@ -85,7 +85,7 @@ export const TRAINING_CONFIGS: Record<string, TrainingConfig> = {
     caloriesPerMinute: 3,
   },
   coord: {
-    defaultMoves: ['vor', 'zurueck', 'ausfall', 'quart', 'oktav', 'quint', 'riposte', 'balestra'],
+    defaultMoves: ['vor', 'zurueck', 'ausfall', 'quart', 'terz', 'quint', 'riposte', 'balestra'],
     defaultPauseSeconds: 4,
     isDrill: false,
     isCombination: true,

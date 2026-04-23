@@ -76,7 +76,7 @@ export const translations = {
     move_zurueck: "Zurück",
     move_ausfall: "Ausfall",
     move_quart: "Quart",
-    move_oktav: "Oktav",
+    move_terz: "Terz",
     move_quint: "Quint",
     move_riposte: "Riposte",
     move_engarde: "En Garde",
@@ -143,7 +143,7 @@ export const translations = {
     desc_zurueck: "Führe den hinteren Fuß nach hinten, dann ziehe den vorderen Fuß nach. Bleibe in der Fechterstellung mit tiefem Schwerpunkt. Achte auf gleichmäßigen Abstand der Füße.",
     desc_ausfall: "Strecke den vorderen Fuß kraftvoll nach vorne und strecke gleichzeitig die hintere Bein. Der Körper bleibt waagerecht, der Waffenarm schießt vor. Danach sofort in die Ausgangslage zurückkehren.",
     desc_quart: "Die Quart-Parade schützt die Innenlinie. Drehe das Handgelenk leicht nach innen und führe die Klinge zur linken Seite. Die Bewegung kommt aus dem Handgelenk – der Ellbogen bleibt nahe am Körper.",
-    desc_oktav: "Die Oktav-Parade schützt die untere Außenlinie. Das Handgelenk dreht nach außen-unten, die Klinge weist zur rechten Seite und leicht nach unten. Kurze, präzise Handgelenkbewegung.",
+    desc_terz: "Die Terz-Parade schützt die Außenlinie. Drehe das Handgelenk nach außen und führe die Klinge auf die rechte Seite. Die Bewegung bleibt kompakt, der Ellbogen bleibt kontrolliert vor dem Körper.",
     desc_quint: "Die Quint-Parade schützt den Kopf. Die Klinge wird horizontal über den Kopf geführt, Schneide nach oben. Achte darauf, die Schulter nicht anzuheben – die Kraft kommt aus dem Unterarm.",
     desc_riposte: "Nach einer erfolgreichen Parade folgt sofort der Gegenangriff. Strecke den Waffenarm zügig aus und treffe den Gegner, bevor er sich erholen kann. Timing und Schnelligkeit sind entscheidend.",
     desc_engarde: "Die Grundhaltung im Fechten: Knie gebeugt, Gewicht gleichmäßig auf beide Füße verteilt, Waffenarm leicht angehoben. Halte die Schultern entspannt, den Blick auf den Gegner gerichtet.",
@@ -247,7 +247,7 @@ export const translations = {
     move_zurueck: "Retreat",
     move_ausfall: "Lunge",
     move_quart: "Quarte",
-    move_oktav: "Octave",
+    move_terz: "Tierce",
     move_quint: "Quinte",
     move_riposte: "Riposte",
     move_engarde: "En Garde",
@@ -310,7 +310,7 @@ export const translations = {
     desc_zurueck: "Step back with the rear foot, then bring the front foot back. Stay in guard position with a low center of gravity. Keep an even distance between your feet.",
     desc_ausfall: "Drive the front foot forward powerfully while extending the rear leg. Keep your body horizontal and extend your weapon arm. Return to the guard position immediately afterward.",
     desc_quart: "The quarte parry protects the inside line. Rotate the wrist slightly inward and guide the blade to the left side. The movement comes from the wrist — keep the elbow close to the body.",
-    desc_oktav: "The octave parry protects the lower outside line. The wrist rotates outward-downward, the blade points to the right and slightly downward. A short, precise wrist movement.",
+    desc_terz: "The tierce parry protects the outside line. Rotate the wrist outward and guide the blade to the right side. Keep the action compact and the elbow controlled in front of the body.",
     desc_quint: "The quinte parry protects the head. The blade is guided horizontally above the head, cutting edge upward. Avoid raising the shoulder — the power comes from the forearm.",
     desc_riposte: "After a successful parry, immediately launch a counterattack. Extend your weapon arm swiftly and hit your opponent before they recover. Timing and speed are essential.",
     desc_engarde: "The basic fencing stance: knees bent, weight evenly distributed on both feet, weapon arm slightly raised. Keep shoulders relaxed, eyes on your opponent.",
@@ -414,7 +414,7 @@ export const translations = {
     move_zurueck: "Reculez",
     move_ausfall: "Fente",
     move_quart: "Quarte",
-    move_oktav: "Octave",
+    move_terz: "Tierce",
     move_quint: "Quinte",
     move_riposte: "Ripostez",
     move_engarde: "En Garde",
@@ -477,7 +477,7 @@ export const translations = {
     desc_zurueck: "Reculez le pied arrière, puis ramenez le pied avant. Restez en position de garde avec le centre de gravité bas. Maintenez un espace régulier entre vos pieds.",
     desc_ausfall: "Poussez le pied avant vers l'avant en étendant la jambe arrière. Le corps reste horizontal, le bras armé se tend. Revenez immédiatement en garde.",
     desc_quart: "La parade de quarte protège la ligne intérieure. Faites pivoter légèrement le poignet vers l'intérieur et guidez la lame vers la gauche. Le mouvement vient du poignet — gardez le coude près du corps.",
-    desc_oktav: "La parade d'octave protège la ligne extérieure basse. Le poignet tourne vers l'extérieur-bas, la lame pointe vers la droite et légèrement vers le bas. Mouvement de poignet court et précis.",
+    desc_terz: "La parade de tierce protège la ligne extérieure. Faites pivoter le poignet vers l'extérieur et guidez la lame vers la droite. Le mouvement reste compact et le coude demeure contrôlé devant le corps.",
     desc_quint: "La parade de quinte protège la tête. La lame est guidée horizontalement au-dessus de la tête, tranchant vers le haut. Évitez de lever l'épaule — la force vient de l'avant-bras.",
     desc_riposte: "Après une parade réussie, lancez immédiatement une contre-attaque. Étendez le bras armé rapidement pour toucher l'adversaire avant qu'il ne récupère. Le timing et la vitesse sont essentiels.",
     desc_engarde: "La position de base en escrime: genoux fléchis, poids également réparti sur les deux pieds, bras armé légèrement levé. Gardez les épaules décontractées, les yeux sur l'adversaire.",
@@ -591,19 +591,19 @@ export const EXERCISE_DETAILS: Record<Language, Record<string, ExerciseDetail>> 
         "Variante: Übe Quart direkt aus der Angriffslinie des Partners – Reaktionsgeschwindigkeit zählt.",
       ],
     },
-    oktav: {
+    terz: {
       steps: [
-        "Starte in der Fechterstellung und erkenne den Angriff auf die untere Außenlinie.",
-        "Drehe das Handgelenk nach außen-unten (Nagel zeigt nach unten-außen).",
-        "Führe die Klinge zur rechten Seite und leicht nach unten.",
+        "Starte in der Fechterstellung und erkenne den Angriff auf die Außenlinie.",
+        "Drehe das Handgelenk nach außen, sodass der Handschutz die Außenlinie deckt.",
+        "Führe die Klinge kompakt zur rechten Seite.",
         "Blockiere die Klinge sauber mit dem mittleren Klingendrittel.",
         "Folge sofort mit der Riposte.",
       ],
       tips: [
-        "Häufiger Fehler: Den Arm zu weit nach unten führen – die Oktav schützt die untere Linie, nicht die Beine.",
+        "Häufiger Fehler: Den Arm zu weit nach außen zu öffnen – halte die Bewegung kompakt.",
         "Die Handgelenkdrehung ist entscheidend – übe sie langsam und bewusst.",
-        "Übung: Lass einen Partner von unten-außen angreifen und pariere reaktiv.",
-        "Kombination: Oktav-Parade gefolgt von einem Ausfall für einen schnellen Gegenangriff.",
+        "Übung: Lass einen Partner über die Außenlinie angreifen und pariere reaktiv mit Terz.",
+        "Kombination: Terz-Parade gefolgt von einem Ausfall für einen schnellen Gegenangriff.",
       ],
     },
     quint: {
@@ -970,19 +970,19 @@ export const EXERCISE_DETAILS: Record<Language, Record<string, ExerciseDetail>> 
         "Variation: Practice quarte directly against your partner's line of attack — reaction speed counts.",
       ],
     },
-    oktav: {
+    terz: {
       steps: [
-        "Start in guard position and detect the attack on the lower outside line.",
-        "Rotate the wrist outward-downward (nail faces down-outward).",
-        "Guide the blade to the right side and slightly downward.",
+        "Start in guard position and detect the attack on the outside line.",
+        "Rotate the wrist outward so the guard closes the outside line.",
+        "Guide the blade compactly to the right side.",
         "Block the blade cleanly with the middle third of your blade.",
         "Follow immediately with the riposte.",
       ],
       tips: [
-        "Common mistake: lowering the arm too far — octave protects the lower line, not the legs.",
+        "Common mistake: opening the arm too far to the outside — keep the action compact.",
         "The wrist rotation is key — practice it slowly and deliberately.",
-        "Drill: Have a partner attack from the lower outside and parry reactively.",
-        "Combination: Octave parry followed by a lunge for a fast counterattack.",
+        "Drill: Have a partner attack over the outside line and parry reactively with tierce.",
+        "Combination: Tierce parry followed by a lunge for a fast counterattack.",
       ],
     },
     quint: {
@@ -1349,19 +1349,19 @@ export const EXERCISE_DETAILS: Record<Language, Record<string, ExerciseDetail>> 
         "Variante: entraînez la quarte directement sur la ligne d'attaque du partenaire — la vitesse de réaction compte.",
       ],
     },
-    oktav: {
+    terz: {
       steps: [
-        "Partez de la garde et détectez l'attaque sur la ligne extérieure basse.",
-        "Faites pivoter le poignet vers l'extérieur-bas (ongle vers le bas-extérieur).",
-        "Guidez la lame vers la droite et légèrement vers le bas.",
+        "Partez de la garde et détectez l'attaque sur la ligne extérieure.",
+        "Faites pivoter le poignet vers l'extérieur afin que la coquille ferme la ligne extérieure.",
+        "Guidez la lame de manière compacte vers la droite.",
         "Bloquez la lame proprement avec le tiers médian de votre lame.",
         "Enchaînez immédiatement avec la riposte.",
       ],
       tips: [
-        "Erreur fréquente: baisser trop le bras — l'octave protège la ligne basse, pas les jambes.",
+        "Erreur fréquente: ouvrir trop le bras vers l'extérieur — gardez le mouvement compact.",
         "La rotation du poignet est essentielle — entraînez-la lentement et consciemment.",
-        "Exercice: demandez à un partenaire d'attaquer de l'extérieur-bas et parez de façon réactive.",
-        "Combinaison: parade d'octave suivie d'une fente pour une contre-attaque rapide.",
+        "Exercice: demandez à un partenaire d'attaquer sur la ligne extérieure et parez en tierce de façon réactive.",
+        "Combinaison: parade de tierce suivie d'une fente pour une contre-attaque rapide.",
       ],
     },
     quint: {
@@ -1676,7 +1676,7 @@ export function tTips(moveId: string, lang: Language): string[] {
 }
 
 export const ALL_MOVES = [
-  'vor', 'zurueck', 'ausfall', 'quart', 'oktav', 'quint', 'riposte', 'engarde', 'balestra'
+  'vor', 'zurueck', 'ausfall', 'quart', 'terz', 'quint', 'riposte', 'engarde', 'balestra'
 ] as const;
 export type MoveType = typeof ALL_MOVES[number];
 

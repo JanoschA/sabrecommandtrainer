@@ -67,11 +67,11 @@ function SvgQuart() {
   );
 }
 
-function SvgOktav() {
+function SvgTerz() {
   return (
     <img
       src={`${import.meta.env.BASE_URL}images/guide/fencing/vor.svg`}
-      alt="Oktav"
+      alt="Terz"
       className="w-full h-full object-contain"
     />
   );
@@ -423,7 +423,7 @@ const EXERCISES: Exercise[] = [
   { id: 'zurueck', category: 'fencing', svgComponent: SvgZurueck },
   { id: 'ausfall', category: 'fencing', svgComponent: SvgAusfall },
   { id: 'quart', category: 'fencing', svgComponent: SvgQuart },
-  { id: 'oktav', category: 'fencing', svgComponent: SvgOktav },
+  { id: 'terz', category: 'fencing', svgComponent: SvgTerz },
   { id: 'quint', category: 'fencing', svgComponent: SvgQuint },
   { id: 'riposte', category: 'fencing', svgComponent: SvgRiposte },
   { id: 'engarde', category: 'fencing', svgComponent: SvgEnGarde },
