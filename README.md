@@ -67,12 +67,27 @@ pnpm install
 
 ### Linux
 
-Start the frontend:
+Start the backend in one terminal:
+
+```bash
+cd /path/to/FechtTrainer
+export PORT=8080
+export CONTACT_EMAIL="your@email.com"
+export SMTP_HOST="your.smtp.host"
+export SMTP_PORT="587"
+export SMTP_USER="your-smtp-user"
+export SMTP_PASS="your-smtp-password"
+pnpm --filter @workspace/api-server run build
+pnpm --filter @workspace/api-server run start
+```
+
+Start the frontend in a second terminal:
 
 ```bash
 cd /path/to/FechtTrainer
 export PORT=21212
 export BASE_PATH=/
+export API_PROXY_TARGET=http://localhost:8080
 pnpm --filter @workspace/sabre-training run dev
 ```
 
@@ -80,23 +95,29 @@ The frontend will be available at:
 
 [http://localhost:21212](http://localhost:21212)
 
-Optional: start the backend in a second terminal:
+### Windows (PowerShell)
 
-```bash
-cd /path/to/FechtTrainer
-export PORT=8080
+Start the backend in one PowerShell window:
+
+```powershell
+Set-Location C:\path\to\FechtTrainer
+$env:PORT="8080"
+$env:CONTACT_EMAIL="your@email.com"
+$env:SMTP_HOST="your.smtp.host"
+$env:SMTP_PORT="587"
+$env:SMTP_USER="your-smtp-user"
+$env:SMTP_PASS="your-smtp-password"
 pnpm --filter @workspace/api-server run build
 pnpm --filter @workspace/api-server run start
 ```
 
-### Windows (PowerShell)
-
-Start the frontend:
+Start the frontend in a second PowerShell window:
 
 ```powershell
 Set-Location C:\path\to\FechtTrainer
 $env:PORT="21212"
 $env:BASE_PATH="/"
+$env:API_PROXY_TARGET="http://localhost:8080"
 pnpm --filter @workspace/sabre-training run dev
 ```
 
@@ -104,20 +125,13 @@ The frontend will be available at:
 
 [http://localhost:21212](http://localhost:21212)
 
-Optional: start the backend in a second PowerShell window:
-
-```powershell
-Set-Location C:\path\to\FechtTrainer
-$env:PORT="8080"
-pnpm --filter @workspace/api-server run build
-pnpm --filter @workspace/api-server run start
-```
-
 ### Notes for Local Development
 
 - For most UI work, the frontend alone is enough.
 - The backend is mainly used for server-side API routes such as health checks and contact form handling.
-- In production, the frontend expects API routes under `/api` on the same origin. If you want a fully integrated local setup, you may want to run both services behind a local reverse proxy or adapt the API base path for local development.
+- `API_PROXY_TARGET` is used only for local Vite development so the frontend can forward `/api` requests to your backend.
+- In production, the frontend expects API routes under `/api` on the same origin.
+- The contact form only works when the backend is running and valid SMTP credentials are configured.
 
 ## Tech Stack
 
