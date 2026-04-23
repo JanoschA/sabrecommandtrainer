@@ -13,14 +13,6 @@ The project is built as a pnpm workspace monorepo with a React/Vite frontend and
 - English, German, and French language support
 - Session summary with quick performance feedback
 
-## Live Website
-
-The production website is available here:
-
-[https://your-live-url-here](https://your-live-url-here)
-
-Replace the placeholder above with your actual deployment URL.
-
 ## Screenshots
 
 ### Home Page

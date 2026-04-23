@@ -47,12 +47,12 @@ const content = {
     s5h: "5. Keine serverseitige Speicherung von Trainingssitzungen",
     s5p:
       "Trainingssitzungen werden derzeit nicht serverseitig gespeichert. Abgeschlossene Trainingseinheiten werden ausschließlich lokal in Ihrem Browser gespeichert.",
-    s6h: "6. Hosting und Datentransfer in Drittländer",
-    s6p1: "Diese Anwendung wird gehostet bei Replit Inc., 1 Hacker Way, Menlo Park, CA 94025, USA.",
+    s6h: "6. Aktueller Bereitstellungsstatus",
+    s6p1: "Diese Anwendung wird derzeit nicht öffentlich als Website betrieben.",
     s6p2:
-      "Bei Aufruf der Website werden technische Verbindungsdaten (IP-Adresse, Browsertyp, Zeitstempel) durch den Hosting-Anbieter kurzzeitig verarbeitet. Dies ist technisch erforderlich und liegt im berechtigten Interesse des Betriebs der Website (Art. 6 Abs. 1 lit. f DSGVO).",
+      "Eine Verarbeitung personenbezogener Daten durch einen externen Hosting-Anbieter für den öffentlichen Webbetrieb findet daher aktuell nicht statt.",
     s6p3:
-      "Da Replit Inc. seinen Sitz in den USA hat, kann es zu einer Übermittlung Ihrer Daten in die USA kommen. Der Datentransfer erfolgt auf Grundlage von Art. 44 ff. DSGVO. Replit Inc. ist nach dem EU-U.S. Data Privacy Framework zertifiziert, was ein angemessenes Datenschutzniveau gewährleistet.",
+      "Sollte die Anwendung künftig öffentlich bereitgestellt werden, wird diese Datenschutzerklärung vor dem Start um die dann tatsächlich genutzte Hosting-Infrastruktur und gegebenenfalls um Hinweise zu Datentransfers in Drittländer ergänzt.",
     s7h: "7. Ihre Rechte als betroffene Person",
     s7intro: "Sie haben gemäß DSGVO folgende Rechte:",
     s7li: [
@@ -107,12 +107,12 @@ const content = {
     s5h: "5. No Server-Side Storage of Training Sessions",
     s5p:
       "Training sessions are currently not stored on our servers. Completed sessions are stored exclusively locally in your browser.",
-    s6h: "6. Hosting and Data Transfer to Third Countries",
-    s6p1: "This application is hosted by Replit Inc., 1 Hacker Way, Menlo Park, CA 94025, USA.",
+    s6h: "6. Current Deployment Status",
+    s6p1: "This application is currently not operated as a publicly available website.",
     s6p2:
-      "When you access the website, technical connection data (IP address, browser type, timestamp) is briefly processed by the hosting provider. This is technically necessary and is in the legitimate interest of operating the website (Art. 6(1)(f) GDPR).",
+      "Accordingly, no personal data is currently processed by an external hosting provider for public web operation.",
     s6p3:
-      "Since Replit Inc. is based in the USA, your data may be transferred to the USA. The data transfer is based on Art. 44 et seq. GDPR. Replit Inc. is certified under the EU-U.S. Data Privacy Framework, which ensures an adequate level of data protection.",
+      "If the application is made publicly available in the future, this privacy policy will be updated before launch to reflect the actual hosting infrastructure and any applicable information about transfers to third countries.",
     s7h: "7. Your Rights as a Data Subject",
     s7intro: "You have the following rights under the GDPR:",
     s7li: [
@@ -170,12 +170,12 @@ const content = {
     s5h: "5. Aucun stockage côté serveur des sessions d'entraînement",
     s5p:
       "Les sessions d'entraînement ne sont actuellement pas stockées sur nos serveurs. Les sessions terminées sont enregistrées exclusivement localement dans votre navigateur.",
-    s6h: "6. Hébergement et transfert de données vers des pays tiers",
-    s6p1: "Cette application est hébergée par Replit Inc., 1 Hacker Way, Menlo Park, CA 94025, États-Unis.",
+    s6h: "6. Statut actuel de mise à disposition",
+    s6p1: "Cette application n'est actuellement pas exploitée comme un site web publiquement accessible.",
     s6p2:
-      "Lors de l'accès au site, des données de connexion techniques (adresse IP, type de navigateur, horodatage) sont brièvement traitées par le fournisseur d'hébergement. Cela est techniquement nécessaire et relève de l'intérêt légitime du fonctionnement du site (art. 6, par. 1, let. f RGPD).",
+      "En conséquence, aucune donnée personnelle n'est actuellement traitée par un prestataire d'hébergement externe dans le cadre d'une exploitation web publique.",
     s6p3:
-      "Replit Inc. étant basée aux États-Unis, vos données peuvent être transférées aux États-Unis. Le transfert de données est fondé sur les art. 44 et suivants du RGPD. Replit Inc. est certifiée selon le cadre de protection des données UE-États-Unis, ce qui garantit un niveau de protection adéquat.",
+      "Si l'application est mise à disposition du public à l'avenir, cette politique de confidentialité sera mise à jour avant son lancement afin de refléter l'infrastructure d'hébergement réellement utilisée et, le cas échéant, les informations relatives aux transferts de données vers des pays tiers.",
     s7h: "7. Vos droits en tant que personne concernée",
     s7intro: "Vous disposez des droits suivants en vertu du RGPD :",
     s7li: [
