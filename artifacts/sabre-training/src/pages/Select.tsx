@@ -106,7 +106,7 @@ export default function SelectTraining() {
         />
       )}
 
-      <div className="max-w-5xl mx-auto relative z-30">
+      <div className="max-w-5xl mx-auto relative z-30 pb-16 md:pb-20">
         <header className="mb-10 flex items-center">
           <Link href="/">
             <Button variant="ghost" size="icon" className="mr-4 rounded-full">
