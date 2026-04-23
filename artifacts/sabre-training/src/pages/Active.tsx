@@ -67,6 +67,7 @@ export default function ActiveTraining() {
   const warmupIndexRef = useRef(0);
   const cooldownIndexRef = useRef(0);
   const positionRef = useRef(0);
+  const historyGuardRef = useRef(false);
 
   const config = TRAINING_CONFIGS[selectedTrainingType ?? 'complete'] ?? TRAINING_CONFIGS.complete;
 
@@ -125,13 +126,13 @@ export default function ActiveTraining() {
     setLocation('/summary');
   }, [stopAll, music, totalSeconds, config, setLastSessionStats, setLocation]);
 
-  const doPause = () => {
+  const doPause = useCallback(() => {
     pausedRef.current = true;
     setIsPaused(true);
     setShowPauseDialog(true);
     window.speechSynthesis.cancel();
     if (isMusicOn) music.stop();
-  };
+  }, [isMusicOn, music]);
 
   const doResume = () => {
     pausedRef.current = false;
@@ -144,6 +145,44 @@ export default function ActiveTraining() {
       cb();
     }
   };
+
+  const doPauseRef = useRef(doPause);
+  useEffect(() => { doPauseRef.current = doPause; }, [doPause]);
+
+  useEffect(() => {
+    const currentUrl = window.location.href;
+    window.history.pushState({ trainingGuard: true }, "", currentUrl);
+
+    const handlePopState = () => {
+      if (!activeRef.current) return;
+
+      if (historyGuardRef.current) {
+        historyGuardRef.current = false;
+        return;
+      }
+
+      historyGuardRef.current = true;
+
+      if (pausedRef.current) setShowPauseDialog(true);
+      else doPauseRef.current();
+
+      window.history.go(1);
+    };
+
+    const handleBeforeUnload = (event: BeforeUnloadEvent) => {
+      if (!activeRef.current) return;
+      event.preventDefault();
+      event.returnValue = "";
+    };
+
+    window.addEventListener("popstate", handlePopState);
+    window.addEventListener("beforeunload", handleBeforeUnload);
+
+    return () => {
+      window.removeEventListener("popstate", handlePopState);
+      window.removeEventListener("beforeunload", handleBeforeUnload);
+    };
+  }, []);
 
   const doStop = () => {
     setShowPauseDialog(false);
