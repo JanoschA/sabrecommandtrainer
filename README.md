@@ -23,23 +23,21 @@ Replace the placeholder above with your actual deployment URL.
 
 ## Screenshots
 
-Add your screenshots to `docs/screenshots/` and replace the placeholders below.
-
 ### Home Page
 
-Placeholder: `docs/screenshots/home-page.png`
+![Home Page](docs/screenshots/home-page.png)
 
 ### Training Session Selection
 
-Placeholder: `docs/screenshots/session-selection.png`
+![Training Session Selection](docs/screenshots/session-selection.png)
 
 ### Active Training
 
-Placeholder: `docs/screenshots/active-training.png`
+![Active Training](docs/screenshots/active-training.png)
 
 ### Session Summary
 
-Placeholder: `docs/screenshots/session-summary.png`
+![Session Summary](docs/screenshots/session-summary.png)
 
 ## Repository Structure
 
