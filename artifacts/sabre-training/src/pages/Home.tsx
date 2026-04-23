@@ -56,6 +56,10 @@ const MOVE_DEMOS = [
 
 export default function Home() {
   const { language } = useTrainingStore();
+  const heroTitleClass =
+    language === "de"
+      ? "font-sans font-extrabold tracking-tight"
+      : "font-display font-bold";
 
   return (
     <div className="relative w-full bg-background">
@@ -86,7 +90,7 @@ export default function Home() {
             <Swords className="w-12 h-12 text-primary" />
           </div>
 
-          <h1 className="text-5xl md:text-7xl font-display font-bold text-white mb-6">
+          <h1 className={`max-w-4xl text-5xl md:text-7xl text-white mb-6 leading-[1.14] md:leading-[1.08] ${heroTitleClass}`}>
             {t('appTitle', language)}
           </h1>
 

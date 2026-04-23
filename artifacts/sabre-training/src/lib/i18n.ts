@@ -2,8 +2,8 @@ export type Language = 'de' | 'en' | 'fr';
 
 export const translations = {
   de: {
-    appTitle: "Säbelfecht Training",
-    appDesc: "Verbessere deine Beinarbeit und Reaktion mit dem ultimativen Audio-Trainingspartner.",
+    appTitle: "Kommandotraining fürs Säbelfechten",
+    appDesc: "Trainiere Beinarbeit, Reaktion und Timing mit audio-geführten Kommandos.",
     start: "Training starten",
     history: "Verlauf",
     selectTraining: "Training auswählen",
@@ -174,8 +174,8 @@ export const translations = {
     // ─── Erfolge page ─────────────────────────────────────────────────────────
   },
   en: {
-    appTitle: "Sabre Fencing Training",
-    appDesc: "Improve your footwork and reaction time with the ultimate audio training partner.",
+    appTitle: "Command Training for Sabre Fencing",
+    appDesc: "Train footwork, reaction, and timing with audio-guided commands.",
     start: "Start Training",
     history: "History",
     selectTraining: "Select Session",
@@ -341,8 +341,8 @@ export const translations = {
     // ─── Erfolge page ─────────────────────────────────────────────────────────
   },
   fr: {
-    appTitle: "Entraînement de Sabre",
-    appDesc: "Améliorez votre jeu de jambes et vos réflexes avec le partenaire audio ultime.",
+    appTitle: "Entraînement aux commandes pour le sabre",
+    appDesc: "Travaillez le jeu de jambes, les réflexes et le timing grâce à des commandes audio guidées.",
     start: "Commencer l'entraînement",
     history: "Historique",
     selectTraining: "Choisissez la séance",
@@ -1705,3 +1705,5 @@ export function tMove(moveId: AnyMove, lang: Language): string {
 export function tDesc(moveId: AnyMove, lang: Language): string {
   return t(`desc_${moveId}` as any, lang);
 }
+
+

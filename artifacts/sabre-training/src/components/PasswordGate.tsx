@@ -1,4 +1,4 @@
-import { useState } from "react";
+﻿import { useState } from "react";
 
 const PASSWORD = "fechten";
 const STORAGE_KEY = "sabre_training_auth";
@@ -65,10 +65,10 @@ export default function PasswordGate({ children }: { children: React.ReactNode }
             textAlign: "center",
           }}
         >
-          Säbelfecht Training
+          Kommandotraining fürs Säbelfechten
         </h1>
         <p style={{ margin: 0, color: "#94a3b8", textAlign: "center", fontSize: "0.95rem" }}>
-          Bitte gib das Passwort ein, um die App zu öffnen.
+          Bitte gib das Passwort ein, um die App zu Ã¶ffnen.
         </p>
         <form
           onSubmit={handleSubmit}
@@ -121,3 +121,4 @@ export default function PasswordGate({ children }: { children: React.ReactNode }
     </div>
   );
 }
+
