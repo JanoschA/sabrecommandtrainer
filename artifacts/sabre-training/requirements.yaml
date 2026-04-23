@@ -1,0 +1,20 @@
+packages:
+  "framer-motion": "For page transitions, smooth athletic UI animations, and timer effects"
+  "zustand": "For simple, robust global state management across the training flow"
+  "canvas-confetti": "For celebration effect on the summary page"
+  "@types/canvas-confetti": "TypeScript definitions for canvas-confetti"
+  "clsx": "Utility for constructing className strings conditionally"
+  "tailwind-merge": "Utility function to efficiently merge Tailwind CSS classes in JS"
+
+images:
+  - path: "artifacts/sabre-training/public/images/hero-fencing.png"
+    description: "Dark, moody, high-contrast athletic photography of a sabre fencer in motion. Neon red accents, deep black background, cinematic lighting, sleek sports performance brand style."
+    aspect_ratio: "16:9"
+  - path: "artifacts/sabre-training/public/images/bg-texture.png"
+    description: "Subtle dark grit and carbon fiber texture, very dark gray, almost black, with faint crimson red edge lighting for background depth."
+    aspect_ratio: "16:9"
+
+notes:
+  - Using zustand for flow state (selection -> settings -> active -> summary)
+  - Using Web Speech API for text-to-speech commands
+  - Assuming @workspace/api-client-react alias works for imported hooks

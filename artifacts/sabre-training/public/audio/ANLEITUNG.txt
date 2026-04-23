@@ -1,0 +1,68 @@
+═══════════════════════════════════════════════════════════════════
+  EIGENE AUDIO-AUFNAHMEN EINBINDEN
+  Säbelfecht Training – Custom Voice Guide
+═══════════════════════════════════════════════════════════════════
+
+Hier kannst du eigene MP3-Aufnahmen ablegen, die statt der
+Browser-Computerstimme (TTS) abgespielt werden.
+Falls eine Datei fehlt, fällt die App automatisch auf TTS zurück.
+
+─── ORDNERSTRUKTUR ──────────────────────────────────────────────
+  public/audio/de/   ← Deutsche Aufnahmen
+  public/audio/en/   ← Englische Aufnahmen
+  public/audio/fr/   ← Französische Aufnahmen
+
+─── DATEINAMEN (Deutsch / de/) ──────────────────────────────────
+
+  FECHTTECHNIK:
+    vor.mp3            → "Vor"
+    zurueck.mp3        → "Zurück"
+    ausfall.mp3        → "Ausfall"
+    parieren.mp3       → "Parieren"
+    riposte.mp3        → "Riposte"
+    en_garde.mp3       → "En Garde"
+    balestra.mp3       → "Balestra"
+
+  AUFWÄRM-ÜBUNGEN:
+    laufen.mp3         → "Laufen"
+    hampelmann.mp3     → "Hampelmann"
+    knie_heben.mp3     → "Knie heben"
+    arme_kreisen.mp3   → "Arme kreisen"
+    schultern_kreisen.mp3 → "Schultern kreisen"
+    rumpf_drehen.mp3   → "Rumpf drehen"
+    leichte_spruenge.mp3  → "Leichte Sprünge"
+    tiefe_hocke.mp3    → "Tiefe Hocke"
+
+  ABKÜHL-ÜBUNGEN:
+    tief_atmen.mp3     → "Tief atmen"
+    schulter_dehnen.mp3 → "Schulter dehnen"
+    wade_dehnen.mp3    → "Wade dehnen"
+    oberschenkel_dehnen.mp3 → "Oberschenkel dehnen"
+    seitendehnung.mp3  → "Seitendehnung"
+    nacken_lockern.mp3 → "Nacken lockern"
+    langsam_gehen.mp3  → "Langsam gehen"
+    ruecken_dehnen.mp3 → "Rücken dehnen"
+
+  MOTIVATION (Drill Sergeant):
+    schneller_.mp3      → "Schneller!"
+    weiter_so_.mp3      → "Weiter so!"
+    fokus_.mp3          → "Fokus!"
+    komm_schon_.mp3     → "Komm schon!"
+    nicht_nachlassen_.mp3 → "Nicht nachlassen!"
+    gib_alles_.mp3      → "Gib alles!"
+
+─── AUFNAHME-TIPPS ──────────────────────────────────────────────
+  • MP3-Format, 44.1 kHz, Stereo oder Mono
+  • Kurz und klar: 0.5–2 Sekunden pro Kommando
+  • Laut und deutlich sprechen, kurz Pause davor/danach lassen
+  • Kostenlose Aufnahme z.B. mit Audacity (audacityteam.org)
+  • Oder: Mit dem Handy aufnehmen und als MP3 exportieren
+
+─── WIE DATEIEN HOCHLADEN? ──────────────────────────────────────
+  Im Replit-Editor links im Dateibaum:
+  1. Öffne public/audio/de/
+  2. Rechtsklick → "Upload file"
+  3. MP3-Datei mit dem richtigen Namen auswählen
+  4. Fertig! Die App erkennt die Datei automatisch beim nächsten Training.
+
+═══════════════════════════════════════════════════════════════════
