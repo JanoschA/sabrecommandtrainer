@@ -66,7 +66,7 @@ export default function Settings() {
       <div className="absolute inset-0 z-0 opacity-10 pointer-events-none"
         style={{ backgroundImage: `url(${import.meta.env.BASE_URL}images/bg-texture.png)`, backgroundSize: 'cover' }} />
 
-      <div className="max-w-3xl mx-auto relative z-10">
+      <div className="max-w-3xl mx-auto relative z-10 pb-16 md:pb-20">
         <header className="mb-8 flex items-center">
           <Link href="/select">
             <Button variant="ghost" size="icon" className="mr-4 rounded-full">
