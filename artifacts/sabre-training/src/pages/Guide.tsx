@@ -590,16 +590,41 @@ export default function Guide() {
   const [selectedExercise, setSelectedExercise] = useState<Exercise | null>(null);
 
   useEffect(() => {
-    const hash = window.location.hash;
-    if (!hash) return;
-    const id = hash.slice(1);
-    const timer = setTimeout(() => {
-      const el = document.getElementById(id);
-      if (el) {
-        el.scrollIntoView({ behavior: 'smooth', block: 'center' });
+    let pendingTimer: number | null = null;
+
+    const openExerciseFromHash = () => {
+      const hash = window.location.hash;
+      if (!hash.startsWith('#move-')) return;
+
+      const id = hash.slice('#move-'.length);
+      const exercise = EXERCISES.find((entry) => entry.id === id);
+      if (!exercise) return;
+
+      setActiveFilter('all');
+      setSelectedExercise(exercise);
+
+      if (pendingTimer !== null) {
+        window.clearTimeout(pendingTimer);
       }
-    }, 400);
-    return () => clearTimeout(timer);
+
+      pendingTimer = window.setTimeout(() => {
+        const el = document.getElementById(`move-${id}`);
+        if (el) {
+          el.scrollIntoView({ behavior: 'smooth', block: 'center' });
+        }
+      }, 400);
+    };
+
+    openExerciseFromHash();
+
+    const handleHashChange = () => openExerciseFromHash();
+    window.addEventListener('hashchange', handleHashChange);
+    return () => {
+      if (pendingTimer !== null) {
+        window.clearTimeout(pendingTimer);
+      }
+      window.removeEventListener('hashchange', handleHashChange);
+    };
   }, []);
 
   const filters: (Category | 'all')[] = ['all', 'fencing', 'warmup', 'cooldown'];
