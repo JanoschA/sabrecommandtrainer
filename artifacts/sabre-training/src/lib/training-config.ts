@@ -58,7 +58,7 @@ export const TRAINING_CONFIGS: Record<string, TrainingConfig> = {
     caloriesPerMinute: 8,
   },
   drill: {
-    defaultMoves: ['vor', 'zurueck', 'ausfall', 'balestra', 'riposte'],
+    defaultMoves: ['vor', 'zurueck', 'ausfall', 'quart', 'terz', 'quint', 'riposte', 'balestra'],
     defaultPauseSeconds: 2,
     isDrill: true,
     isCombination: false,
