@@ -176,7 +176,9 @@ function KontaktForm({ apiBase }: { apiBase: string }) {
           : language === 'fr'
           ? 'Vos données sont utilisées uniquement pour répondre à votre demande.'
           : 'Your data is used solely to respond to your inquiry.'}
-        {' '}<Link href="/datenschutz"><span className="underline hover:text-zinc-400 cursor-pointer">Datenschutzerklärung</span></Link>
+        {' '}<Link href="/datenschutz"><span className="underline hover:text-zinc-400 cursor-pointer">
+          {language === 'de' ? 'Datenschutzerklärung' : language === 'fr' ? 'Politique de confidentialité' : 'Privacy Policy'}
+        </span></Link>
       </p>
     </form>
   );
