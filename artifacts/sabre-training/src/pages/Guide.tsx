@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, type ReactNode } from "react";
 import { Link } from "wouter";
 import { motion, AnimatePresence } from "framer-motion";
 import { Button } from "@/components/ui/button";
@@ -10,137 +10,221 @@ import { ArrowLeft, Filter } from "lucide-react";
 import { cn } from "@/lib/utils";
 import Footer from "@/components/Footer";
 
-// ─── SVG Illustrations ─────────────────────────────────────────────────────────
+// SVG illustrations
+
+function GuideFigure({ children }: { children: ReactNode }) {
+  return (
+    <svg viewBox="0 0 120 120" fill="none" xmlns="http://www.w3.org/2000/svg" className="w-full h-full">
+      <path d="M18 104H102" stroke="currentColor" strokeOpacity="0.22" strokeWidth="2.5" strokeLinecap="round" />
+      <g stroke="currentColor" strokeWidth="3" strokeLinecap="round" strokeLinejoin="round">
+        {children}
+      </g>
+    </svg>
+  );
+}
+
+function MotionArrow({
+  d,
+  opacity = 0.9,
+  dash = false,
+}: {
+  d: string;
+  opacity?: number;
+  dash?: boolean;
+}) {
+  return (
+    <path
+      d={d}
+      stroke="currentColor"
+      strokeWidth="2"
+      strokeLinecap="round"
+      strokeLinejoin="round"
+      strokeDasharray={dash ? "4 4" : undefined}
+      opacity={opacity}
+    />
+  );
+}
+
+function GhostPose({ children }: { children: ReactNode }) {
+  return (
+    <g opacity="0.16" strokeWidth="2.2">
+      {children}
+    </g>
+  );
+}
 
 function SvgVor() {
   return (
-    <img
-      src={`${import.meta.env.BASE_URL}images/guide/fencing/vor.svg`}
-      alt="Vor"
-      className="w-full h-full object-contain"
-    />
+    <GuideFigure>
+      <GhostPose>
+        <circle cx="42" cy="16" r="7" />
+        <path d="M42 24L44 58" />
+        <path d="M44 36L28 46" />
+        <path d="M44 38L74 38" />
+        <path d="M44 58L34 80L30 100" />
+        <path d="M44 58L60 76L66 100" />
+      </GhostPose>
+      <circle cx="50" cy="16" r="7" />
+      <path d="M50 24L52 58" />
+      <path d="M52 36L34 46" />
+      <path d="M52 38L86 38" />
+      <path d="M52 58L40 78L34 100" />
+      <path d="M52 58L72 74L82 100" />
+      <MotionArrow d="M24 92C34 84 42 82 50 82" opacity={0.45} dash />
+      <MotionArrow d="M74 24L92 38L84 40" />
+    </GuideFigure>
   );
 }
 
 function SvgZurueck() {
   return (
-    <svg viewBox="0 0 100 120" fill="none" xmlns="http://www.w3.org/2000/svg" className="w-full h-full">
-      <circle cx="50" cy="14" r="8" stroke="currentColor" strokeWidth="2.5" />
-      <line x1="50" y1="22" x2="50" y2="60" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" />
-      <line x1="50" y1="38" x2="65" y2="52" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" />
-      <line x1="50" y1="38" x2="28" y2="44" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" />
-      <line x1="50" y1="60" x2="40" y2="90" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" />
-      <line x1="50" y1="60" x2="62" y2="90" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" />
-      <line x1="40" y1="90" x2="36" y2="108" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" />
-      <line x1="62" y1="90" x2="66" y2="108" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" />
-      <polyline points="28,44 15,36 10,42" stroke="currentColor" strokeWidth="2" fill="none" strokeLinecap="round" strokeLinejoin="round" />
-      <path d="M 72 58 L 82 58 M 82 58 L 78 54 M 82 58 L 78 62" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" opacity="0.6" />
-    </svg>
+    <GuideFigure>
+      <GhostPose>
+        <circle cx="56" cy="16" r="7" />
+        <path d="M56 24L58 58" />
+        <path d="M58 36L40 46" />
+        <path d="M58 38L88 38" />
+        <path d="M58 58L44 80L40 100" />
+        <path d="M58 58L74 78L78 100" />
+      </GhostPose>
+      <circle cx="48" cy="16" r="7" />
+      <path d="M48 24L50 58" />
+      <path d="M50 36L34 48" />
+      <path d="M50 38L82 38" />
+      <path d="M50 58L34 78L28 100" />
+      <path d="M50 58L68 76L74 100" />
+      <MotionArrow d="M36 26L18 38L26 40" />
+      <MotionArrow d="M60 88C52 84 44 82 34 82" opacity={0.45} dash />
+    </GuideFigure>
   );
 }
 
 function SvgAusfall() {
   return (
-    <svg viewBox="0 0 100 120" fill="none" xmlns="http://www.w3.org/2000/svg" className="w-full h-full">
-      <circle cx="38" cy="14" r="8" stroke="currentColor" strokeWidth="2.5" />
-      <line x1="38" y1="22" x2="42" y2="52" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" />
-      <line x1="40" y1="34" x2="20" y2="44" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" />
-      <line x1="40" y1="34" x2="72" y2="38" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" />
-      <line x1="42" y1="52" x2="22" y2="72" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" />
-      <line x1="42" y1="52" x2="76" y2="68" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" />
-      <line x1="22" y1="72" x2="14" y2="90" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" />
-      <line x1="22" y1="72" x2="28" y2="90" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" />
-      <line x1="76" y1="68" x2="92" y2="88" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" />
-      <line x1="76" y1="68" x2="72" y2="90" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" />
-      <polyline points="72,38 85,30 90,36" stroke="currentColor" strokeWidth="2" fill="none" strokeLinecap="round" strokeLinejoin="round" />
-    </svg>
+    <GuideFigure>
+      <GhostPose>
+        <circle cx="44" cy="18" r="7" />
+        <path d="M44 26L48 56" />
+        <path d="M46 38L28 46" />
+        <path d="M46 40L76 38" />
+        <path d="M48 56L34 78L30 98" />
+        <path d="M48 56L66 74L72 98" />
+      </GhostPose>
+      <circle cx="38" cy="16" r="7" />
+      <path d="M38 24L46 56" />
+      <path d="M42 38L26 48" />
+      <path d="M42 40L92 36" />
+      <path d="M46 56L26 74L18 100" />
+      <path d="M46 56L82 70L96 100" />
+      <MotionArrow d="M86 28L104 34L96 40" />
+      <MotionArrow d="M56 92C66 84 74 80 84 78" opacity={0.45} dash />
+    </GuideFigure>
   );
 }
 
 function SvgQuart() {
   return (
-    <img
-      src={`${import.meta.env.BASE_URL}images/guide/fencing/vor.svg`}
-      alt="Quart"
-      className="w-full h-full object-contain"
-    />
+    <GuideFigure>
+      <circle cx="56" cy="16" r="7" />
+      <path d="M56 24L58 58" />
+      <path d="M58 38L42 48" />
+      <path d="M58 40L42 26" />
+      <path d="M58 58L46 80L42 100" />
+      <path d="M58 58L74 76L80 100" />
+      <path d="M40 28L18 34" />
+      <MotionArrow d="M50 20C42 24 38 30 40 38C42 46 48 48 56 50" opacity={0.65} dash />
+      <MotionArrow d="M20 30L12 38L22 40" />
+    </GuideFigure>
   );
 }
 
 function SvgTerz() {
   return (
-    <img
-      src={`${import.meta.env.BASE_URL}images/guide/fencing/vor.svg`}
-      alt="Terz"
-      className="w-full h-full object-contain"
-    />
+    <GuideFigure>
+      <circle cx="52" cy="16" r="7" />
+      <path d="M52 24L54 58" />
+      <path d="M54 38L38 48" />
+      <path d="M54 40L72 28" />
+      <path d="M54 58L42 80L38 100" />
+      <path d="M54 58L70 76L74 100" />
+      <path d="M72 28L96 22" />
+      <MotionArrow d="M62 22C70 26 76 32 76 40C76 46 72 50 66 52" opacity={0.65} dash />
+      <MotionArrow d="M92 16L104 20L96 28" />
+    </GuideFigure>
   );
 }
 
 function SvgQuint() {
   return (
-    <img
-      src={`${import.meta.env.BASE_URL}images/guide/fencing/vor.svg`}
-      alt="Quint"
-      className="w-full h-full object-contain"
-    />
+    <GuideFigure>
+      <circle cx="54" cy="20" r="7" />
+      <path d="M54 28L56 60" />
+      <path d="M56 40L40 48" />
+      <path d="M56 40L72 24" />
+      <path d="M56 60L46 82L42 100" />
+      <path d="M56 60L72 80L76 100" />
+      <path d="M42 18L84 18" />
+      <MotionArrow d="M48 12C54 8 64 8 70 12" opacity={0.65} dash />
+      <MotionArrow d="M80 10L90 18L80 26" />
+    </GuideFigure>
   );
 }
 
 function SvgRiposte() {
   return (
-    <svg viewBox="0 0 100 120" fill="none" xmlns="http://www.w3.org/2000/svg" className="w-full h-full">
-      <circle cx="48" cy="14" r="8" stroke="currentColor" strokeWidth="2.5" />
-      <line x1="48" y1="22" x2="48" y2="60" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" />
-      <line x1="48" y1="38" x2="30" y2="48" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" />
-      <line x1="48" y1="38" x2="65" y2="28" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" />
-      <path d="M 58 18 L 88 8 M 88 8 L 84 18 M 88 8 L 78 14" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
-      <path d="M 26 50 C 12 40 10 24 20 14 C 24 10 30 8 36 10" stroke="currentColor" strokeWidth="1.5" fill="none" strokeLinecap="round" strokeDasharray="3,2" opacity="0.7" />
-      <path d="M 34 42 L 24 32" stroke="currentColor" strokeWidth="2" strokeLinecap="round" opacity="0.5" />
-      <line x1="48" y1="60" x2="38" y2="88" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" />
-      <line x1="48" y1="60" x2="60" y2="88" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" />
-      <line x1="38" y1="88" x2="34" y2="108" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" />
-      <line x1="60" y1="88" x2="64" y2="108" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" />
-    </svg>
+    <GuideFigure>
+      <GhostPose>
+        <circle cx="52" cy="16" r="7" />
+        <path d="M52 24L54 58" />
+        <path d="M54 38L38 48" />
+        <path d="M54 40L40 26" />
+        <path d="M54 58L42 80L38 100" />
+        <path d="M54 58L70 76L74 100" />
+      </GhostPose>
+      <circle cx="54" cy="16" r="7" />
+      <path d="M54 24L56 58" />
+      <path d="M56 38L40 48" />
+      <path d="M56 40L86 30" />
+      <path d="M56 58L44 80L40 100" />
+      <path d="M56 58L72 76L76 100" />
+      <MotionArrow d="M80 22L100 26L90 34" />
+      <MotionArrow d="M36 34C28 28 26 20 32 14C36 10 42 10 48 12" opacity={0.6} dash />
+    </GuideFigure>
   );
 }
 
 function SvgEnGarde() {
   return (
-    <svg viewBox="0 0 100 120" fill="none" xmlns="http://www.w3.org/2000/svg" className="w-full h-full">
-      <circle cx="50" cy="12" r="8" stroke="currentColor" strokeWidth="2.5" />
-      <line x1="50" y1="20" x2="50" y2="58" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" />
-      <line x1="50" y1="36" x2="32" y2="50" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" />
-      <line x1="50" y1="36" x2="68" y2="28" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" />
-      <path d="M 60 16 L 82 10 M 82 10 L 78 20 M 82 10 L 74 16" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
-      <line x1="50" y1="58" x2="36" y2="84" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" />
-      <line x1="50" y1="58" x2="66" y2="80" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" />
-      <line x1="36" y1="84" x2="28" y2="108" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" />
-      <line x1="66" y1="80" x2="72" y2="108" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" />
-      <line x1="26" y1="108" x2="74" y2="108" stroke="currentColor" strokeWidth="2" strokeLinecap="round" opacity="0.4" />
-    </svg>
+    <GuideFigure>
+      <circle cx="52" cy="16" r="7" />
+      <path d="M52 24L54 58" />
+      <path d="M54 38L40 48" />
+      <path d="M54 40L82 34" />
+      <path d="M54 58L40 80L34 100" />
+      <path d="M54 58L70 76L80 100" />
+      <path d="M82 34L100 30" />
+      <MotionArrow d="M26 102C38 100 48 100 60 100" opacity={0.25} />
+      <MotionArrow d="M62 102C72 100 82 100 94 102" opacity={0.25} />
+    </GuideFigure>
   );
 }
 
 function SvgBalestra() {
   return (
-    <svg viewBox="0 0 100 120" fill="none" xmlns="http://www.w3.org/2000/svg" className="w-full h-full">
-      <circle cx="50" cy="12" r="8" stroke="currentColor" strokeWidth="2.5" />
-      <line x1="50" y1="20" x2="50" y2="56" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" />
-      <line x1="50" y1="36" x2="34" y2="48" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" />
-      <line x1="50" y1="36" x2="68" y2="40" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" />
-      <line x1="50" y1="56" x2="34" y2="80" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" />
-      <line x1="50" y1="56" x2="68" y2="76" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" />
-      <line x1="34" y1="80" x2="28" y2="92" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" />
-      <line x1="68" y1="76" x2="74" y2="92" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" />
-      <path d="M 26 84 Q 50 72 74 78" stroke="currentColor" strokeWidth="1.5" fill="none" strokeDasharray="3,2" opacity="0.5" strokeLinecap="round" />
-      <polyline points="68,40 82,32 86,38" stroke="currentColor" strokeWidth="2" fill="none" strokeLinecap="round" strokeLinejoin="round" />
-      <line x1="26" y1="92" x2="26" y2="108" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" />
-      <line x1="74" y1="92" x2="74" y2="108" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" />
-    </svg>
+    <GuideFigure>
+      <circle cx="52" cy="14" r="7" />
+      <path d="M52 22L54 54" />
+      <path d="M54 36L38 46" />
+      <path d="M54 38L82 34" />
+      <path d="M54 54L40 72L34 90" />
+      <path d="M54 54L72 70L80 90" />
+      <path d="M82 34L98 30" />
+      <MotionArrow d="M28 86C44 74 58 70 76 72" opacity={0.55} dash />
+      <MotionArrow d="M40 92L44 102" opacity={0.5} />
+      <MotionArrow d="M76 92L80 102" opacity={0.5} />
+    </GuideFigure>
   );
 }
-
 function SvgLaufen() {
   return (
     <svg viewBox="0 0 100 120" fill="none" xmlns="http://www.w3.org/2000/svg" className="w-full h-full">
@@ -408,7 +492,7 @@ function SvgRuecken() {
   );
 }
 
-// ─── Exercise data ─────────────────────────────────────────────────────────────
+// ÃƒÂ¢Ã¢â‚¬ÂÃ¢â€šÂ¬ÃƒÂ¢Ã¢â‚¬ÂÃ¢â€šÂ¬ÃƒÂ¢Ã¢â‚¬ÂÃ¢â€šÂ¬ Exercise data ÃƒÂ¢Ã¢â‚¬ÂÃ¢â€šÂ¬ÃƒÂ¢Ã¢â‚¬ÂÃ¢â€šÂ¬ÃƒÂ¢Ã¢â‚¬ÂÃ¢â€šÂ¬ÃƒÂ¢Ã¢â‚¬ÂÃ¢â€šÂ¬ÃƒÂ¢Ã¢â‚¬ÂÃ¢â€šÂ¬ÃƒÂ¢Ã¢â‚¬ÂÃ¢â€šÂ¬ÃƒÂ¢Ã¢â‚¬ÂÃ¢â€šÂ¬ÃƒÂ¢Ã¢â‚¬ÂÃ¢â€šÂ¬ÃƒÂ¢Ã¢â‚¬ÂÃ¢â€šÂ¬ÃƒÂ¢Ã¢â‚¬ÂÃ¢â€šÂ¬ÃƒÂ¢Ã¢â‚¬ÂÃ¢â€šÂ¬ÃƒÂ¢Ã¢â‚¬ÂÃ¢â€šÂ¬ÃƒÂ¢Ã¢â‚¬ÂÃ¢â€šÂ¬ÃƒÂ¢Ã¢â‚¬ÂÃ¢â€šÂ¬ÃƒÂ¢Ã¢â‚¬ÂÃ¢â€šÂ¬ÃƒÂ¢Ã¢â‚¬ÂÃ¢â€šÂ¬ÃƒÂ¢Ã¢â‚¬ÂÃ¢â€šÂ¬ÃƒÂ¢Ã¢â‚¬ÂÃ¢â€šÂ¬ÃƒÂ¢Ã¢â‚¬ÂÃ¢â€šÂ¬ÃƒÂ¢Ã¢â‚¬ÂÃ¢â€šÂ¬ÃƒÂ¢Ã¢â‚¬ÂÃ¢â€šÂ¬ÃƒÂ¢Ã¢â‚¬ÂÃ¢â€šÂ¬ÃƒÂ¢Ã¢â‚¬ÂÃ¢â€šÂ¬ÃƒÂ¢Ã¢â‚¬ÂÃ¢â€šÂ¬ÃƒÂ¢Ã¢â‚¬ÂÃ¢â€šÂ¬ÃƒÂ¢Ã¢â‚¬ÂÃ¢â€šÂ¬ÃƒÂ¢Ã¢â‚¬ÂÃ¢â€šÂ¬ÃƒÂ¢Ã¢â‚¬ÂÃ¢â€šÂ¬ÃƒÂ¢Ã¢â‚¬ÂÃ¢â€šÂ¬ÃƒÂ¢Ã¢â‚¬ÂÃ¢â€šÂ¬ÃƒÂ¢Ã¢â‚¬ÂÃ¢â€šÂ¬ÃƒÂ¢Ã¢â‚¬ÂÃ¢â€šÂ¬ÃƒÂ¢Ã¢â‚¬ÂÃ¢â€šÂ¬ÃƒÂ¢Ã¢â‚¬ÂÃ¢â€šÂ¬ÃƒÂ¢Ã¢â‚¬ÂÃ¢â€šÂ¬ÃƒÂ¢Ã¢â‚¬ÂÃ¢â€šÂ¬ÃƒÂ¢Ã¢â‚¬ÂÃ¢â€šÂ¬ÃƒÂ¢Ã¢â‚¬ÂÃ¢â€šÂ¬ÃƒÂ¢Ã¢â‚¬ÂÃ¢â€šÂ¬ÃƒÂ¢Ã¢â‚¬ÂÃ¢â€šÂ¬ÃƒÂ¢Ã¢â‚¬ÂÃ¢â€šÂ¬ÃƒÂ¢Ã¢â‚¬ÂÃ¢â€šÂ¬ÃƒÂ¢Ã¢â‚¬ÂÃ¢â€šÂ¬ÃƒÂ¢Ã¢â‚¬ÂÃ¢â€šÂ¬ÃƒÂ¢Ã¢â‚¬ÂÃ¢â€šÂ¬ÃƒÂ¢Ã¢â‚¬ÂÃ¢â€šÂ¬ÃƒÂ¢Ã¢â‚¬ÂÃ¢â€šÂ¬ÃƒÂ¢Ã¢â‚¬ÂÃ¢â€šÂ¬ÃƒÂ¢Ã¢â‚¬ÂÃ¢â€šÂ¬ÃƒÂ¢Ã¢â‚¬ÂÃ¢â€šÂ¬ÃƒÂ¢Ã¢â‚¬ÂÃ¢â€šÂ¬ÃƒÂ¢Ã¢â‚¬ÂÃ¢â€šÂ¬ÃƒÂ¢Ã¢â‚¬ÂÃ¢â€šÂ¬ÃƒÂ¢Ã¢â‚¬ÂÃ¢â€šÂ¬ÃƒÂ¢Ã¢â‚¬ÂÃ¢â€šÂ¬ÃƒÂ¢Ã¢â‚¬ÂÃ¢â€šÂ¬ÃƒÂ¢Ã¢â‚¬ÂÃ¢â€šÂ¬ÃƒÂ¢Ã¢â‚¬ÂÃ¢â€šÂ¬ÃƒÂ¢Ã¢â‚¬ÂÃ¢â€šÂ¬ÃƒÂ¢Ã¢â‚¬ÂÃ¢â€šÂ¬ÃƒÂ¢Ã¢â‚¬ÂÃ¢â€šÂ¬
 
 type Category = 'fencing' | 'warmup' | 'cooldown';
 
@@ -446,7 +530,7 @@ const EXERCISES: Exercise[] = [
   { id: 'c_ruecken', category: 'cooldown', svgComponent: SvgRuecken },
 ];
 
-// ─── Category config ────────────────────────────────────────────────────────────
+// ÃƒÂ¢Ã¢â‚¬ÂÃ¢â€šÂ¬ÃƒÂ¢Ã¢â‚¬ÂÃ¢â€šÂ¬ÃƒÂ¢Ã¢â‚¬ÂÃ¢â€šÂ¬ Category config ÃƒÂ¢Ã¢â‚¬ÂÃ¢â€šÂ¬ÃƒÂ¢Ã¢â‚¬ÂÃ¢â€šÂ¬ÃƒÂ¢Ã¢â‚¬ÂÃ¢â€šÂ¬ÃƒÂ¢Ã¢â‚¬ÂÃ¢â€šÂ¬ÃƒÂ¢Ã¢â‚¬ÂÃ¢â€šÂ¬ÃƒÂ¢Ã¢â‚¬ÂÃ¢â€šÂ¬ÃƒÂ¢Ã¢â‚¬ÂÃ¢â€šÂ¬ÃƒÂ¢Ã¢â‚¬ÂÃ¢â€šÂ¬ÃƒÂ¢Ã¢â‚¬ÂÃ¢â€šÂ¬ÃƒÂ¢Ã¢â‚¬ÂÃ¢â€šÂ¬ÃƒÂ¢Ã¢â‚¬ÂÃ¢â€šÂ¬ÃƒÂ¢Ã¢â‚¬ÂÃ¢â€šÂ¬ÃƒÂ¢Ã¢â‚¬ÂÃ¢â€šÂ¬ÃƒÂ¢Ã¢â‚¬ÂÃ¢â€šÂ¬ÃƒÂ¢Ã¢â‚¬ÂÃ¢â€šÂ¬ÃƒÂ¢Ã¢â‚¬ÂÃ¢â€šÂ¬ÃƒÂ¢Ã¢â‚¬ÂÃ¢â€šÂ¬ÃƒÂ¢Ã¢â‚¬ÂÃ¢â€šÂ¬ÃƒÂ¢Ã¢â‚¬ÂÃ¢â€šÂ¬ÃƒÂ¢Ã¢â‚¬ÂÃ¢â€šÂ¬ÃƒÂ¢Ã¢â‚¬ÂÃ¢â€šÂ¬ÃƒÂ¢Ã¢â‚¬ÂÃ¢â€šÂ¬ÃƒÂ¢Ã¢â‚¬ÂÃ¢â€šÂ¬ÃƒÂ¢Ã¢â‚¬ÂÃ¢â€šÂ¬ÃƒÂ¢Ã¢â‚¬ÂÃ¢â€šÂ¬ÃƒÂ¢Ã¢â‚¬ÂÃ¢â€šÂ¬ÃƒÂ¢Ã¢â‚¬ÂÃ¢â€šÂ¬ÃƒÂ¢Ã¢â‚¬ÂÃ¢â€šÂ¬ÃƒÂ¢Ã¢â‚¬ÂÃ¢â€šÂ¬ÃƒÂ¢Ã¢â‚¬ÂÃ¢â€šÂ¬ÃƒÂ¢Ã¢â‚¬ÂÃ¢â€šÂ¬ÃƒÂ¢Ã¢â‚¬ÂÃ¢â€šÂ¬ÃƒÂ¢Ã¢â‚¬ÂÃ¢â€šÂ¬ÃƒÂ¢Ã¢â‚¬ÂÃ¢â€šÂ¬ÃƒÂ¢Ã¢â‚¬ÂÃ¢â€šÂ¬ÃƒÂ¢Ã¢â‚¬ÂÃ¢â€šÂ¬ÃƒÂ¢Ã¢â‚¬ÂÃ¢â€šÂ¬ÃƒÂ¢Ã¢â‚¬ÂÃ¢â€šÂ¬ÃƒÂ¢Ã¢â‚¬ÂÃ¢â€šÂ¬ÃƒÂ¢Ã¢â‚¬ÂÃ¢â€šÂ¬ÃƒÂ¢Ã¢â‚¬ÂÃ¢â€šÂ¬ÃƒÂ¢Ã¢â‚¬ÂÃ¢â€šÂ¬ÃƒÂ¢Ã¢â‚¬ÂÃ¢â€šÂ¬ÃƒÂ¢Ã¢â‚¬ÂÃ¢â€šÂ¬ÃƒÂ¢Ã¢â‚¬ÂÃ¢â€šÂ¬ÃƒÂ¢Ã¢â‚¬ÂÃ¢â€šÂ¬ÃƒÂ¢Ã¢â‚¬ÂÃ¢â€šÂ¬ÃƒÂ¢Ã¢â‚¬ÂÃ¢â€šÂ¬ÃƒÂ¢Ã¢â‚¬ÂÃ¢â€šÂ¬ÃƒÂ¢Ã¢â‚¬ÂÃ¢â€šÂ¬ÃƒÂ¢Ã¢â‚¬ÂÃ¢â€šÂ¬ÃƒÂ¢Ã¢â‚¬ÂÃ¢â€šÂ¬ÃƒÂ¢Ã¢â‚¬ÂÃ¢â€šÂ¬ÃƒÂ¢Ã¢â‚¬ÂÃ¢â€šÂ¬ÃƒÂ¢Ã¢â‚¬ÂÃ¢â€šÂ¬ÃƒÂ¢Ã¢â‚¬ÂÃ¢â€šÂ¬ÃƒÂ¢Ã¢â‚¬ÂÃ¢â€šÂ¬ÃƒÂ¢Ã¢â‚¬ÂÃ¢â€šÂ¬ÃƒÂ¢Ã¢â‚¬ÂÃ¢â€šÂ¬ÃƒÂ¢Ã¢â‚¬ÂÃ¢â€šÂ¬
 
 const CATEGORY_CONFIG: Record<Category, { color: string; border: string; bg: string; badge: string }> = {
   fencing: {
@@ -474,7 +558,7 @@ function getCategoryLabel(cat: Category | 'all', lang: Language): string {
   return t(`cat_${cat}` as any, lang);
 }
 
-// ─── Exercise Card ─────────────────────────────────────────────────────────────
+// ÃƒÂ¢Ã¢â‚¬ÂÃ¢â€šÂ¬ÃƒÂ¢Ã¢â‚¬ÂÃ¢â€šÂ¬ÃƒÂ¢Ã¢â‚¬ÂÃ¢â€šÂ¬ Exercise Card ÃƒÂ¢Ã¢â‚¬ÂÃ¢â€šÂ¬ÃƒÂ¢Ã¢â‚¬ÂÃ¢â€šÂ¬ÃƒÂ¢Ã¢â‚¬ÂÃ¢â€šÂ¬ÃƒÂ¢Ã¢â‚¬ÂÃ¢â€šÂ¬ÃƒÂ¢Ã¢â‚¬ÂÃ¢â€šÂ¬ÃƒÂ¢Ã¢â‚¬ÂÃ¢â€šÂ¬ÃƒÂ¢Ã¢â‚¬ÂÃ¢â€šÂ¬ÃƒÂ¢Ã¢â‚¬ÂÃ¢â€šÂ¬ÃƒÂ¢Ã¢â‚¬ÂÃ¢â€šÂ¬ÃƒÂ¢Ã¢â‚¬ÂÃ¢â€šÂ¬ÃƒÂ¢Ã¢â‚¬ÂÃ¢â€šÂ¬ÃƒÂ¢Ã¢â‚¬ÂÃ¢â€šÂ¬ÃƒÂ¢Ã¢â‚¬ÂÃ¢â€šÂ¬ÃƒÂ¢Ã¢â‚¬ÂÃ¢â€šÂ¬ÃƒÂ¢Ã¢â‚¬ÂÃ¢â€šÂ¬ÃƒÂ¢Ã¢â‚¬ÂÃ¢â€šÂ¬ÃƒÂ¢Ã¢â‚¬ÂÃ¢â€šÂ¬ÃƒÂ¢Ã¢â‚¬ÂÃ¢â€šÂ¬ÃƒÂ¢Ã¢â‚¬ÂÃ¢â€šÂ¬ÃƒÂ¢Ã¢â‚¬ÂÃ¢â€šÂ¬ÃƒÂ¢Ã¢â‚¬ÂÃ¢â€šÂ¬ÃƒÂ¢Ã¢â‚¬ÂÃ¢â€šÂ¬ÃƒÂ¢Ã¢â‚¬ÂÃ¢â€šÂ¬ÃƒÂ¢Ã¢â‚¬ÂÃ¢â€šÂ¬ÃƒÂ¢Ã¢â‚¬ÂÃ¢â€šÂ¬ÃƒÂ¢Ã¢â‚¬ÂÃ¢â€šÂ¬ÃƒÂ¢Ã¢â‚¬ÂÃ¢â€šÂ¬ÃƒÂ¢Ã¢â‚¬ÂÃ¢â€šÂ¬ÃƒÂ¢Ã¢â‚¬ÂÃ¢â€šÂ¬ÃƒÂ¢Ã¢â‚¬ÂÃ¢â€šÂ¬ÃƒÂ¢Ã¢â‚¬ÂÃ¢â€šÂ¬ÃƒÂ¢Ã¢â‚¬ÂÃ¢â€šÂ¬ÃƒÂ¢Ã¢â‚¬ÂÃ¢â€šÂ¬ÃƒÂ¢Ã¢â‚¬ÂÃ¢â€šÂ¬ÃƒÂ¢Ã¢â‚¬ÂÃ¢â€šÂ¬ÃƒÂ¢Ã¢â‚¬ÂÃ¢â€šÂ¬ÃƒÂ¢Ã¢â‚¬ÂÃ¢â€šÂ¬ÃƒÂ¢Ã¢â‚¬ÂÃ¢â€šÂ¬ÃƒÂ¢Ã¢â‚¬ÂÃ¢â€šÂ¬ÃƒÂ¢Ã¢â‚¬ÂÃ¢â€šÂ¬ÃƒÂ¢Ã¢â‚¬ÂÃ¢â€šÂ¬ÃƒÂ¢Ã¢â‚¬ÂÃ¢â€šÂ¬ÃƒÂ¢Ã¢â‚¬ÂÃ¢â€šÂ¬ÃƒÂ¢Ã¢â‚¬ÂÃ¢â€šÂ¬ÃƒÂ¢Ã¢â‚¬ÂÃ¢â€šÂ¬ÃƒÂ¢Ã¢â‚¬ÂÃ¢â€šÂ¬ÃƒÂ¢Ã¢â‚¬ÂÃ¢â€šÂ¬ÃƒÂ¢Ã¢â‚¬ÂÃ¢â€šÂ¬ÃƒÂ¢Ã¢â‚¬ÂÃ¢â€šÂ¬ÃƒÂ¢Ã¢â‚¬ÂÃ¢â€šÂ¬ÃƒÂ¢Ã¢â‚¬ÂÃ¢â€šÂ¬ÃƒÂ¢Ã¢â‚¬ÂÃ¢â€šÂ¬ÃƒÂ¢Ã¢â‚¬ÂÃ¢â€šÂ¬ÃƒÂ¢Ã¢â‚¬ÂÃ¢â€šÂ¬ÃƒÂ¢Ã¢â‚¬ÂÃ¢â€šÂ¬ÃƒÂ¢Ã¢â‚¬ÂÃ¢â€šÂ¬ÃƒÂ¢Ã¢â‚¬ÂÃ¢â€šÂ¬ÃƒÂ¢Ã¢â‚¬ÂÃ¢â€šÂ¬ÃƒÂ¢Ã¢â‚¬ÂÃ¢â€šÂ¬ÃƒÂ¢Ã¢â‚¬ÂÃ¢â€šÂ¬ÃƒÂ¢Ã¢â‚¬ÂÃ¢â€šÂ¬
 
 function ExerciseCard({ exercise, language, index, onClick }: { exercise: Exercise; language: Language; index: number; onClick: () => void }) {
   const cfg = CATEGORY_CONFIG[exercise.category];
@@ -510,7 +594,7 @@ function ExerciseCard({ exercise, language, index, onClick }: { exercise: Exerci
   );
 }
 
-// ─── Guide Page ─────────────────────────────────────────────────────────────────
+// ÃƒÂ¢Ã¢â‚¬ÂÃ¢â€šÂ¬ÃƒÂ¢Ã¢â‚¬ÂÃ¢â€šÂ¬ÃƒÂ¢Ã¢â‚¬ÂÃ¢â€šÂ¬ Guide Page ÃƒÂ¢Ã¢â‚¬ÂÃ¢â€šÂ¬ÃƒÂ¢Ã¢â‚¬ÂÃ¢â€šÂ¬ÃƒÂ¢Ã¢â‚¬ÂÃ¢â€šÂ¬ÃƒÂ¢Ã¢â‚¬ÂÃ¢â€šÂ¬ÃƒÂ¢Ã¢â‚¬ÂÃ¢â€šÂ¬ÃƒÂ¢Ã¢â‚¬ÂÃ¢â€šÂ¬ÃƒÂ¢Ã¢â‚¬ÂÃ¢â€šÂ¬ÃƒÂ¢Ã¢â‚¬ÂÃ¢â€šÂ¬ÃƒÂ¢Ã¢â‚¬ÂÃ¢â€šÂ¬ÃƒÂ¢Ã¢â‚¬ÂÃ¢â€šÂ¬ÃƒÂ¢Ã¢â‚¬ÂÃ¢â€šÂ¬ÃƒÂ¢Ã¢â‚¬ÂÃ¢â€šÂ¬ÃƒÂ¢Ã¢â‚¬ÂÃ¢â€šÂ¬ÃƒÂ¢Ã¢â‚¬ÂÃ¢â€šÂ¬ÃƒÂ¢Ã¢â‚¬ÂÃ¢â€šÂ¬ÃƒÂ¢Ã¢â‚¬ÂÃ¢â€šÂ¬ÃƒÂ¢Ã¢â‚¬ÂÃ¢â€šÂ¬ÃƒÂ¢Ã¢â‚¬ÂÃ¢â€šÂ¬ÃƒÂ¢Ã¢â‚¬ÂÃ¢â€šÂ¬ÃƒÂ¢Ã¢â‚¬ÂÃ¢â€šÂ¬ÃƒÂ¢Ã¢â‚¬ÂÃ¢â€šÂ¬ÃƒÂ¢Ã¢â‚¬ÂÃ¢â€šÂ¬ÃƒÂ¢Ã¢â‚¬ÂÃ¢â€šÂ¬ÃƒÂ¢Ã¢â‚¬ÂÃ¢â€šÂ¬ÃƒÂ¢Ã¢â‚¬ÂÃ¢â€šÂ¬ÃƒÂ¢Ã¢â‚¬ÂÃ¢â€šÂ¬ÃƒÂ¢Ã¢â‚¬ÂÃ¢â€šÂ¬ÃƒÂ¢Ã¢â‚¬ÂÃ¢â€šÂ¬ÃƒÂ¢Ã¢â‚¬ÂÃ¢â€šÂ¬ÃƒÂ¢Ã¢â‚¬ÂÃ¢â€šÂ¬ÃƒÂ¢Ã¢â‚¬ÂÃ¢â€šÂ¬ÃƒÂ¢Ã¢â‚¬ÂÃ¢â€šÂ¬ÃƒÂ¢Ã¢â‚¬ÂÃ¢â€šÂ¬ÃƒÂ¢Ã¢â‚¬ÂÃ¢â€šÂ¬ÃƒÂ¢Ã¢â‚¬ÂÃ¢â€šÂ¬ÃƒÂ¢Ã¢â‚¬ÂÃ¢â€šÂ¬ÃƒÂ¢Ã¢â‚¬ÂÃ¢â€šÂ¬ÃƒÂ¢Ã¢â‚¬ÂÃ¢â€šÂ¬ÃƒÂ¢Ã¢â‚¬ÂÃ¢â€šÂ¬ÃƒÂ¢Ã¢â‚¬ÂÃ¢â€šÂ¬ÃƒÂ¢Ã¢â‚¬ÂÃ¢â€šÂ¬ÃƒÂ¢Ã¢â‚¬ÂÃ¢â€šÂ¬ÃƒÂ¢Ã¢â‚¬ÂÃ¢â€šÂ¬ÃƒÂ¢Ã¢â‚¬ÂÃ¢â€šÂ¬ÃƒÂ¢Ã¢â‚¬ÂÃ¢â€šÂ¬ÃƒÂ¢Ã¢â‚¬ÂÃ¢â€šÂ¬ÃƒÂ¢Ã¢â‚¬ÂÃ¢â€šÂ¬ÃƒÂ¢Ã¢â‚¬ÂÃ¢â€šÂ¬ÃƒÂ¢Ã¢â‚¬ÂÃ¢â€šÂ¬ÃƒÂ¢Ã¢â‚¬ÂÃ¢â€šÂ¬ÃƒÂ¢Ã¢â‚¬ÂÃ¢â€šÂ¬ÃƒÂ¢Ã¢â‚¬ÂÃ¢â€šÂ¬ÃƒÂ¢Ã¢â‚¬ÂÃ¢â€šÂ¬ÃƒÂ¢Ã¢â‚¬ÂÃ¢â€šÂ¬ÃƒÂ¢Ã¢â‚¬ÂÃ¢â€šÂ¬ÃƒÂ¢Ã¢â‚¬ÂÃ¢â€šÂ¬ÃƒÂ¢Ã¢â‚¬ÂÃ¢â€šÂ¬ÃƒÂ¢Ã¢â‚¬ÂÃ¢â€šÂ¬ÃƒÂ¢Ã¢â‚¬ÂÃ¢â€šÂ¬ÃƒÂ¢Ã¢â‚¬ÂÃ¢â€šÂ¬ÃƒÂ¢Ã¢â‚¬ÂÃ¢â€šÂ¬ÃƒÂ¢Ã¢â‚¬ÂÃ¢â€šÂ¬ÃƒÂ¢Ã¢â‚¬ÂÃ¢â€šÂ¬ÃƒÂ¢Ã¢â‚¬ÂÃ¢â€šÂ¬ÃƒÂ¢Ã¢â‚¬ÂÃ¢â€šÂ¬
 
 export default function Guide() {
   const { language } = useTrainingStore();
