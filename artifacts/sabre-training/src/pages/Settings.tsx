@@ -34,6 +34,10 @@ export default function Settings() {
 
   const config = TRAINING_CONFIGS[selectedTrainingType] ?? TRAINING_CONFIGS.complete;
   const hasFixedExercises = !!config.fixedExercises;
+  const selectableMoves = (config.defaultMoves.length > 0 ? config.defaultMoves : ALL_MOVES).filter(
+    (move) => move !== 'engarde'
+  );
+  const activeSelectableMoveCount = selectableMoves.filter((move) => selectedMoves.includes(move)).length;
 
   const handleStart = () => { preloadAudio(language); initSpeech(); setLocation('/active'); };
 
@@ -261,19 +265,19 @@ export default function Settings() {
                 <div className="flex justify-end mb-2">
                   <button
                     onClick={() =>
-                      selectedMoves.length === ALL_MOVES.length
+                      activeSelectableMoveCount === selectableMoves.length
                         ? setSelectedMoves([])
-                        : setSelectedMoves([...ALL_MOVES])
+                        : setSelectedMoves([...selectableMoves])
                     }
                     className="text-xs font-medium text-zinc-400 hover:text-white transition-colors underline underline-offset-2"
                   >
-                    {selectedMoves.length === ALL_MOVES.length
+                    {activeSelectableMoveCount === selectableMoves.length
                       ? (language === 'de' ? 'Alle abwählen' : language === 'fr' ? 'Tout désélectionner' : 'Deselect all')
                       : (language === 'de' ? 'Alle auswählen' : language === 'fr' ? 'Tout sélectionner' : 'Select all')}
                   </button>
                 </div>
                 <div className="grid grid-cols-2 sm:grid-cols-4 gap-2">
-                  {ALL_MOVES.filter(move => move !== 'engarde').map(move => {
+                  {selectableMoves.map(move => {
                     const isActive = selectedMoves.includes(move);
                     return (
                       <button key={move}
@@ -288,7 +292,7 @@ export default function Settings() {
                     );
                   })}
                 </div>
-                {selectedMoves.length === 0 && (
+                {activeSelectableMoveCount === 0 && (
                   <p className="text-destructive text-xs mt-2 font-medium">
                     {language === 'de' ? 'Mindestens eine Bewegung wählen!' : 'Select at least one move!'}
                   </p>
@@ -477,7 +481,7 @@ export default function Settings() {
         <div className="max-w-3xl mx-auto">
           <Button size="lg" className="w-full h-14 text-xl rounded-2xl" onClick={handleStart}
             disabled={
-              (!hasFixedExercises && !config.isPhased && selectedMoves.length === 0) ||
+              (!hasFixedExercises && !config.isPhased && activeSelectableMoveCount === 0) ||
               (selectedTrainingType === 'warmup' && WARMUP_EXERCISE_LIST.filter(e => !disabledWarmupExercises.includes(e)).length === 0) ||
               (selectedTrainingType === 'cooldown' && COOLDOWN_EXERCISE_LIST.filter(e => !disabledCooldownExercises.includes(e)).length === 0)
             }>

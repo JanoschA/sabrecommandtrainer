@@ -93,7 +93,7 @@ export const TRAINING_CONFIGS: Record<string, TrainingConfig> = {
     caloriesPerMinute: 9,
   },
   footwork: {
-    defaultMoves: ['vor', 'zurueck', 'balestra'],
+    defaultMoves: ['vor', 'zurueck', 'ausfall', 'balestra'],
     defaultPauseSeconds: 3,
     isDrill: false,
     isCombination: false,
