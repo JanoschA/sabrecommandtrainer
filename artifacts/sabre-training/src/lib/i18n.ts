@@ -2,7 +2,7 @@ export type Language = 'de' | 'en' | 'fr';
 
 export const translations = {
   de: {
-    appTitle: "Kommandotraining fürs Säbelfechten",
+    appTitle: "Säbelfechten Kommandotraining",
     appDesc: "Trainiere Beinarbeit, Reaktion und Timing mit audio-geführten Kommandos.",
     start: "Training starten",
     history: "Verlauf",
@@ -174,7 +174,7 @@ export const translations = {
     // ─── Erfolge page ─────────────────────────────────────────────────────────
   },
   en: {
-    appTitle: "Command Training for Sabre Fencing",
+    appTitle: "Sabre Fencing Command Training",
     appDesc: "Train footwork, reaction, and timing with audio-guided commands.",
     start: "Start Training",
     history: "History",
@@ -341,7 +341,7 @@ export const translations = {
     // ─── Erfolge page ─────────────────────────────────────────────────────────
   },
   fr: {
-    appTitle: "Entraînement aux commandes pour le sabre",
+    appTitle: "Escrime au sabre Entraînement aux commandes",
     appDesc: "Travaillez le jeu de jambes, les réflexes et le timing grâce à des commandes audio guidées.",
     start: "Commencer l'entraînement",
     history: "Historique",

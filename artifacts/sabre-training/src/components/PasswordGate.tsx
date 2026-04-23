@@ -65,7 +65,7 @@ export default function PasswordGate({ children }: { children: React.ReactNode }
             textAlign: "center",
           }}
         >
-          Kommandotraining fürs Säbelfechten
+          Säbelfechten Kommandotraining
         </h1>
         <p style={{ margin: 0, color: "#94a3b8", textAlign: "center", fontSize: "0.95rem" }}>
           Bitte gib das Passwort ein, um die App zu Ã¶ffnen.

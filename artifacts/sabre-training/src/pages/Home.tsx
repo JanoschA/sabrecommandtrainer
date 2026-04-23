@@ -60,6 +60,26 @@ export default function Home() {
     language === "de"
       ? "font-sans font-extrabold tracking-tight"
       : "font-display font-bold";
+  const heroTitle =
+    language === "de" ? (
+      <>
+        Säbelfechten
+        <br />
+        Kommandotraining
+      </>
+    ) : language === "en" ? (
+      <>
+        Sabre Fencing
+        <br />
+        Command Training
+      </>
+    ) : (
+      <>
+        Escrime au sabre
+        <br />
+        Entraînement aux commandes
+      </>
+    );
 
   return (
     <div className="relative w-full bg-background">
@@ -91,7 +111,7 @@ export default function Home() {
           </div>
 
           <h1 className={`max-w-4xl text-5xl md:text-7xl text-white mb-6 leading-[1.14] md:leading-[1.08] ${heroTitleClass}`}>
-            {t('appTitle', language)}
+            {heroTitle}
           </h1>
 
           <p className="text-lg md:text-xl text-zinc-300 mb-12 max-w-xl leading-relaxed">
