@@ -176,7 +176,39 @@ For a minimal AWS setup, the repository includes a Lightsail deployment path wit
 - a Lightsail bootstrap file
 - a GitHub Actions workflow that redeploys on pushes to `master`
 
-See [deploy/aws/lightsail/README.md](deploy/aws/lightsail/README.md).
+Recommended first-time setup:
+
+1. Create a small Ubuntu Lightsail instance
+2. Open at least ports `22` and `80` in the Lightsail firewall
+3. SSH into the server and install Docker manually once:
+
+```bash
+sudo apt-get update
+sudo apt-get install -y ca-certificates curl gnupg
+sudo install -m 0755 -d /etc/apt/keyrings
+curl -fsSL https://download.docker.com/linux/ubuntu/gpg | sudo gpg --dearmor -o /etc/apt/keyrings/docker.gpg
+sudo chmod a+r /etc/apt/keyrings/docker.gpg
+echo "deb [arch=$(dpkg --print-architecture) signed-by=/etc/apt/keyrings/docker.gpg] https://download.docker.com/linux/ubuntu $(. /etc/os-release && echo $VERSION_CODENAME) stable" | sudo tee /etc/apt/sources.list.d/docker.list > /dev/null
+sudo apt-get update
+sudo apt-get install -y docker-ce docker-ce-cli containerd.io docker-buildx-plugin docker-compose-plugin
+sudo systemctl enable docker
+sudo systemctl start docker
+sudo usermod -aG docker ubuntu
+sudo mkdir -p /opt/fechttrainer/app
+sudo chown -R ubuntu:ubuntu /opt/fechttrainer
+```
+
+4. Reconnect once and verify:
+
+```bash
+docker --version
+docker compose version
+```
+
+5. Add the required GitHub repository secrets
+6. Push to `master` to trigger the deploy workflow
+
+For the full Lightsail notes, including secrets and optional `cloud-init`, see [deploy/aws/lightsail/README.md](deploy/aws/lightsail/README.md).
 
 ## License
 
