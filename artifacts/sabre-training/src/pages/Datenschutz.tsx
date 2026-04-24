@@ -37,13 +37,18 @@ const content = {
       "Rechtsgrundlage: Art. 6 Abs. 1 lit. f DSGVO (berechtigtes Interesse an der Bereitstellung der App-Funktionalität).",
     s4h: "4. Kontaktformular",
     s4p: "Wenn Sie uns über das Kontaktformular eine Nachricht senden, werden die folgenden Daten verarbeitet:",
-    s4li: ["Ihr Name", "Ihre E-Mail-Adresse", "Ihr Nachrichtentext"],
+    s4li: [
+      "Ihr Name",
+      "Ihre E-Mail-Adresse",
+      "Ihr Nachrichtentext",
+      "technische Verbindungsdaten für die Sicherheitsprüfung durch Cloudflare Turnstile",
+    ],
     s4p2a:
-      "Diese Angaben werden ausschließlich verwendet, um Ihre Anfrage zu beantworten. Die Daten werden per E-Mail an uns weitergeleitet und ",
+      "Diese Angaben werden ausschließlich verwendet, um Ihre Anfrage zu beantworten und missbräuchliche Formularübermittlungen zu verhindern. Für die Sicherheitsprüfung wird Cloudflare Turnstile eingebunden. Dabei können technische Verbindungsdaten an Cloudflare übermittelt werden. Die Daten werden per E-Mail an uns weitergeleitet und ",
     s4p2b: "nicht dauerhaft auf unseren Servern gespeichert",
     s4p2c: ".",
     s4legal:
-      "Rechtsgrundlage: Art. 6 Abs. 1 lit. b DSGVO (Vertragsanbahnung/vorvertragliche Maßnahmen) bzw. Art. 6 Abs. 1 lit. f DSGVO (berechtigtes Interesse an der Beantwortung von Anfragen).",
+      "Rechtsgrundlage: Art. 6 Abs. 1 lit. b DSGVO (Vertragsanbahnung/vorvertragliche Maßnahmen) bzw. Art. 6 Abs. 1 lit. f DSGVO (berechtigtes Interesse an der sicheren Bereitstellung des Kontaktformulars und der Beantwortung von Anfragen).",
     s5h: "5. Keine serverseitige Speicherung von Trainingssitzungen",
     s5p:
       "Trainingssitzungen werden derzeit nicht serverseitig gespeichert. Abgeschlossene Trainingseinheiten werden ausschließlich lokal in Ihrem Browser gespeichert.",
@@ -98,12 +103,18 @@ const content = {
     s3legal: "Legal basis: Art. 6(1)(f) GDPR (legitimate interest in providing app functionality).",
     s4h: "4. Contact Form",
     s4p: "When you send us a message via the contact form, the following data is processed:",
-    s4li: ["Your name", "Your email address", "Your message text"],
-    s4p2a: "This information is used solely to respond to your enquiry. The data is forwarded to us by email and is ",
+    s4li: [
+      "Your name",
+      "Your email address",
+      "Your message text",
+      "technical connection data for the Cloudflare Turnstile security check",
+    ],
+    s4p2a:
+      "This information is used solely to respond to your enquiry and to prevent abusive form submissions. Cloudflare Turnstile is used for the security check, which may involve the transmission of technical connection data to Cloudflare. The data is forwarded to us by email and is ",
     s4p2b: "not stored permanently on our servers",
     s4p2c: ".",
     s4legal:
-      "Legal basis: Art. 6(1)(b) GDPR (performance of a contract or pre-contractual measures) or Art. 6(1)(f) GDPR (legitimate interest in responding to enquiries).",
+      "Legal basis: Art. 6(1)(b) GDPR (performance of a contract or pre-contractual measures) or Art. 6(1)(f) GDPR (legitimate interest in securely providing the contact form and responding to enquiries).",
     s5h: "5. No Server-Side Storage of Training Sessions",
     s5p:
       "Training sessions are currently not stored on our servers. Completed sessions are stored exclusively locally in your browser.",
@@ -160,13 +171,18 @@ const content = {
       "Base légale : art. 6, par. 1, let. f RGPD (intérêt légitime à fournir la fonctionnalité de l'application).",
     s4h: "4. Formulaire de contact",
     s4p: "Lorsque vous nous envoyez un message via le formulaire de contact, les données suivantes sont traitées :",
-    s4li: ["Votre nom", "Votre adresse e-mail", "Votre message"],
+    s4li: [
+      "Votre nom",
+      "Votre adresse e-mail",
+      "Votre message",
+      "des données techniques de connexion pour la vérification de sécurité via Cloudflare Turnstile",
+    ],
     s4p2a:
-      "Ces informations sont utilisées uniquement pour répondre à votre demande. Les données nous sont transmises par e-mail et ne sont ",
+      "Ces informations sont utilisées uniquement pour répondre à votre demande et empêcher les envois abusifs via le formulaire. Cloudflare Turnstile est utilisé pour la vérification de sécurité ; des données techniques de connexion peuvent donc être transmises à Cloudflare. Les données nous sont transmises par e-mail et ne sont ",
     s4p2b: "pas stockées de façon permanente sur nos serveurs",
     s4p2c: ".",
     s4legal:
-      "Base légale : art. 6, par. 1, let. b RGPD (exécution d'un contrat ou mesures précontractuelles) ou art. 6, par. 1, let. f RGPD (intérêt légitime à répondre aux demandes).",
+      "Base légale : art. 6, par. 1, let. b RGPD (exécution d'un contrat ou mesures précontractuelles) ou art. 6, par. 1, let. f RGPD (intérêt légitime à fournir le formulaire de contact de manière sécurisée et à répondre aux demandes).",
     s5h: "5. Aucun stockage côté serveur des sessions d'entraînement",
     s5p:
       "Les sessions d'entraînement ne sont actuellement pas stockées sur nos serveurs. Les sessions terminées sont enregistrées exclusivement localement dans votre navigateur.",
@@ -203,22 +219,22 @@ export default function Datenschutz() {
 
   return (
     <div className="min-h-screen bg-background flex flex-col">
-      <div className="flex-1 p-4 md:p-8 pt-12">
-        <div className="max-w-3xl mx-auto">
+      <div className="flex-1 p-4 pt-12 md:p-8">
+        <div className="mx-auto max-w-3xl">
           <header className="mb-8 flex items-center">
             <Link href="/">
               <Button variant="ghost" size="icon" className="mr-4 rounded-full">
-                <ChevronLeft className="w-6 h-6" />
+                <ChevronLeft className="h-6 w-6" />
               </Button>
             </Link>
             <h1 className="text-3xl font-display font-bold text-white">{c.title}</h1>
           </header>
 
-          <div className="space-y-8 text-zinc-300 leading-relaxed">
+          <div className="space-y-8 leading-relaxed text-zinc-300">
             <section>
-              <h2 className="text-xl font-bold text-white mb-3">{c.s1h}</h2>
+              <h2 className="mb-3 text-xl font-bold text-white">{c.s1h}</h2>
               <p>{c.s1intro}</p>
-              <address className="not-italic mt-2 text-zinc-400">
+              <address className="mt-2 not-italic text-zinc-400">
                 <strong>{LEGAL_NAME}</strong>
                 <br />
                 {LEGAL_STREET}
@@ -235,7 +251,7 @@ export default function Datenschutz() {
             </section>
 
             <section>
-              <h2 className="text-xl font-bold text-white mb-3">{c.s2h}</h2>
+              <h2 className="mb-3 text-xl font-bold text-white">{c.s2h}</h2>
               <p>{c.s2p1}</p>
               <p className="mt-2">
                 {c.s2p2a}
@@ -245,9 +261,9 @@ export default function Datenschutz() {
             </section>
 
             <section>
-              <h2 className="text-xl font-bold text-white mb-3">{c.s3h}</h2>
+              <h2 className="mb-3 text-xl font-bold text-white">{c.s3h}</h2>
               <p>{c.s3p}</p>
-              <ul className="list-disc list-inside mt-2 space-y-1 text-zinc-400">
+              <ul className="mt-2 list-inside list-disc space-y-1 text-zinc-400">
                 {c.s3li.map((item, i) => (
                   <li key={i}>{item}</li>
                 ))}
@@ -257,9 +273,9 @@ export default function Datenschutz() {
             </section>
 
             <section>
-              <h2 className="text-xl font-bold text-white mb-3">{c.s4h}</h2>
+              <h2 className="mb-3 text-xl font-bold text-white">{c.s4h}</h2>
               <p>{c.s4p}</p>
-              <ul className="list-disc list-inside mt-2 space-y-1 text-zinc-400">
+              <ul className="mt-2 list-inside list-disc space-y-1 text-zinc-400">
                 {c.s4li.map((item, i) => (
                   <li key={i}>{item}</li>
                 ))}
@@ -273,21 +289,21 @@ export default function Datenschutz() {
             </section>
 
             <section>
-              <h2 className="text-xl font-bold text-white mb-3">{c.s5h}</h2>
+              <h2 className="mb-3 text-xl font-bold text-white">{c.s5h}</h2>
               <p>{c.s5p}</p>
             </section>
 
             <section>
-              <h2 className="text-xl font-bold text-white mb-3">{c.s6h}</h2>
+              <h2 className="mb-3 text-xl font-bold text-white">{c.s6h}</h2>
               <p>{c.s6p1}</p>
               <p className="mt-2">{c.s6p2}</p>
               <p className="mt-2">{c.s6p3}</p>
             </section>
 
             <section>
-              <h2 className="text-xl font-bold text-white mb-3">{c.s7h}</h2>
+              <h2 className="mb-3 text-xl font-bold text-white">{c.s7h}</h2>
               <p>{c.s7intro}</p>
-              <ul className="list-disc list-inside mt-2 space-y-1 text-zinc-400">
+              <ul className="mt-2 list-inside list-disc space-y-1 text-zinc-400">
                 {c.s7li.map(([bold, rest], i) => (
                   <li key={i}>
                     <strong className="text-zinc-300">{bold}</strong> {rest}
@@ -298,7 +314,7 @@ export default function Datenschutz() {
             </section>
 
             <section>
-              <h2 className="text-xl font-bold text-white mb-3">{c.s8h}</h2>
+              <h2 className="mb-3 text-xl font-bold text-white">{c.s8h}</h2>
               <p>{c.s8p}</p>
               <p className="mt-2">
                 <a
@@ -313,11 +329,11 @@ export default function Datenschutz() {
             </section>
 
             <section>
-              <h2 className="text-xl font-bold text-white mb-3">{c.s9h}</h2>
+              <h2 className="mb-3 text-xl font-bold text-white">{c.s9h}</h2>
               <p>{c.s9p}</p>
             </section>
 
-            <p className="text-xs text-zinc-600 pt-4 border-t border-white/8">{c.updated}</p>
+            <p className="border-t border-white/8 pt-4 text-xs text-zinc-600">{c.updated}</p>
           </div>
         </div>
       </div>

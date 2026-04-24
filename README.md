@@ -69,6 +69,8 @@ export SMTP_HOST="your.smtp.host"
 export SMTP_PORT="587"
 export SMTP_USER="your-smtp-user"
 export SMTP_PASS="your-smtp-password"
+export TURNSTILE_SITE_KEY="1x00000000000000000000AA"
+export TURNSTILE_SECRET_KEY="1x0000000000000000000000000000000AA"
 pnpm --filter @workspace/api-server run build
 pnpm --filter @workspace/api-server run start
 ```
@@ -99,6 +101,8 @@ $env:SMTP_HOST="your.smtp.host"
 $env:SMTP_PORT="587"
 $env:SMTP_USER="your-smtp-user"
 $env:SMTP_PASS="your-smtp-password"
+$env:TURNSTILE_SITE_KEY="1x00000000000000000000AA"
+$env:TURNSTILE_SECRET_KEY="1x0000000000000000000000000000000AA"
 pnpm --filter @workspace/api-server run build
 pnpm --filter @workspace/api-server run start
 ```
@@ -123,7 +127,8 @@ The frontend will be available at:
 - The backend is mainly used for server-side API routes such as health checks and contact form handling.
 - `API_PROXY_TARGET` is used only for local Vite development so the frontend can forward `/api` requests to your backend.
 - In production, the frontend expects API routes under `/api` on the same origin.
-- The contact form only works when the backend is running and valid SMTP credentials are configured.
+- The contact form only works when the backend is running and valid SMTP plus Cloudflare Turnstile credentials are configured.
+- The Turnstile keys above are Cloudflare's official test keys for local development. Replace them with your real widget keys before going live.
 
 ## Tech Stack
 
