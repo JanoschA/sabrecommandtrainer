@@ -270,10 +270,20 @@ const FEATURED_MOVES = [
   },
 ] as const;
 
+const DEMO_SEQUENCE: ReadonlyArray<{ moveId: (typeof FEATURED_MOVES)[number]["id"]; fileKey?: string }> = [
+  { moveId: "engarde", fileKey: "en_garde" },
+  { moveId: "zurueck" },
+  { moveId: "vor" },
+  { moveId: "ausfall" },
+  { moveId: "zurueck" },
+  { moveId: "zurueck" },
+] as const;
+
 export default function Home() {
   const { language, speechVolume } = useTrainingStore();
   const [isDemoPlaying, setIsDemoPlaying] = useState(false);
   const [isPreparingDemo, setIsPreparingDemo] = useState(false);
+  const [activeDemoStepIndex, setActiveDemoStepIndex] = useState<number | null>(null);
   const speechVolumeRef = useRef(speechVolume);
   const demoRunRef = useRef(0);
   const demoAssetsReadyRef = useRef<null | typeof language>(null);
@@ -318,7 +328,7 @@ export default function Home() {
           playDemo: "Beispiel abspielen",
           stopDemo: "Demo stoppen",
           metrics: [
-            { label: "Kommandos", value: "4 Kommandos" },
+            { label: "Kommandos", value: "6 Kommandos" },
             { label: "Rhythmus", value: "Direkt" },
             { label: "Ziel", value: "Timing & Reaktion" },
           ],
@@ -337,7 +347,7 @@ export default function Home() {
             playDemo: "Lancer l'exemple",
             stopDemo: "Arrêter l'exemple",
             metrics: [
-              { label: "Commandes", value: "4 Appels" },
+              { label: "Commandes", value: "6 Appels" },
               { label: "Rythme", value: "Direct" },
               { label: "But", value: "Timing & Réaction" },
             ],
@@ -355,7 +365,7 @@ export default function Home() {
             playDemo: "Play sample",
             stopDemo: "Stop sample",
             metrics: [
-              { label: "Commands", value: "4 Calls" },
+              { label: "Commands", value: "6 Calls" },
               { label: "Tempo", value: "Direct" },
               { label: "Goal", value: "Timing & Reaction" },
             ],
@@ -363,9 +373,14 @@ export default function Home() {
             finalCta: "Ready for the drill?",
           };
 
-  const drillSequence = FEATURED_MOVES.map((move) => ({
-    id: move.id,
-    content: move[language],
+  const featuredMovesById = Object.fromEntries(
+    FEATURED_MOVES.map((move) => [move.id, move]),
+  ) as Record<(typeof FEATURED_MOVES)[number]["id"], (typeof FEATURED_MOVES)[number]>;
+
+  const drillSequence = DEMO_SEQUENCE.map((step, index) => ({
+    key: `${step.moveId}-${index}`,
+    id: step.moveId,
+    content: featuredMovesById[step.moveId][language],
   }));
   const guideCardCta =
     language === "de"
@@ -398,12 +413,9 @@ export default function Home() {
     preloadAudio(language);
 
     const base = import.meta.env.BASE_URL ?? "/";
-    const files = [
-      "en_garde",
-      "vor",
-      "zurueck",
-      "ausfall",
-    ].map((key) => `${base}audio/${language}/training/${key}.mp3`);
+    const files = [...new Set(DEMO_SEQUENCE.map((step) => step.fileKey ?? step.moveId))].map(
+      (key) => `${base}audio/${language}/training/${key}.mp3`,
+    );
 
     await Promise.all(
       files.map(async (url) => {
@@ -424,6 +436,7 @@ export default function Home() {
     if (isDemoPlaying) {
       demoRunRef.current += 1;
       stopAll();
+      setActiveDemoStepIndex(null);
       setIsDemoPlaying(false);
       return;
     }
@@ -438,22 +451,17 @@ export default function Home() {
     if (demoRunRef.current !== runId) {
       setIsPreparingDemo(false);
       setIsDemoPlaying(false);
+      setActiveDemoStepIndex(null);
       return;
     }
 
     initSpeech();
     setIsPreparingDemo(false);
 
-    const sequence: Array<{ moveId: string; fileKey?: string }> = [
-      { moveId: "engarde", fileKey: "en_garde" },
-      { moveId: "vor" },
-      { moveId: "zurueck" },
-      { moveId: "ausfall" },
-    ];
-
     try {
-      for (const step of sequence) {
+      for (const [index, step] of DEMO_SEQUENCE.entries()) {
         if (demoRunRef.current !== runId) return;
+        setActiveDemoStepIndex(index);
         await speak(tMove(step.moveId, language), step.fileKey);
         if (demoRunRef.current !== runId) return;
         await new Promise((resolve) => window.setTimeout(resolve, 450));
@@ -462,6 +470,7 @@ export default function Home() {
       if (demoRunRef.current === runId) {
         setIsPreparingDemo(false);
         setIsDemoPlaying(false);
+        setActiveDemoStepIndex(null);
       }
     }
   };
@@ -680,13 +689,19 @@ export default function Home() {
 
               <div className="mt-8 flex flex-wrap items-center gap-3">
                 {drillSequence.map((step, index) => (
-                  <div key={step.id} className="flex items-center gap-3">
+                  <div key={step.key} className="flex items-center gap-3">
                     <Link href={`/guide#move-${step.id}`}>
-                      <div className="rounded-2xl border border-white/10 bg-white/[0.03] px-4 py-3 min-w-[8.5rem] hover:border-primary/35 hover:bg-primary/5 transition-colors cursor-pointer">
+                      <div
+                        className={`rounded-2xl border px-4 py-3 min-w-[8.5rem] transition-all cursor-pointer ${
+                          activeDemoStepIndex === index
+                            ? "border-primary/35 bg-primary/5"
+                            : "border-white/10 bg-white/[0.03] hover:border-primary/35 hover:bg-primary/5"
+                        }`}
+                      >
                         <div className="text-[11px] uppercase tracking-[0.2em] text-zinc-500 mb-1">
                           {String(index + 1).padStart(2, "0")}
                         </div>
-                        <div className="text-white font-semibold">
+                        <div className={`font-semibold ${activeDemoStepIndex === index ? "text-primary" : "text-white"}`}>
                           {step.content.title}
                         </div>
                       </div>
