@@ -2,13 +2,14 @@ import { useEffect, useState, useRef, useCallback, MutableRefObject } from "reac
 import { useLocation } from "wouter";
 import { motion, AnimatePresence } from "framer-motion";
 import { useTrainingStore } from "@/store/use-training-store";
-import { t, tMove } from "@/lib/i18n";
+import { t, tDesc, tMove } from "@/lib/i18n";
 import { formatTime } from "@/lib/utils";
 import { useSpeech } from "@/hooks/use-speech";
 import { useMusic } from "@/hooks/use-music";
 import { TRAINING_CONFIGS, WARMUP_EXERCISE_LIST, COOLDOWN_EXERCISE_LIST, PHASE_BOUNDARIES, MOVE_DISPLACEMENT, SPACE_STEP_LIMITS } from "@/lib/training-config";
-import { Square, Activity, Volume2, VolumeX, Pause, Play, HelpCircle } from "lucide-react";
+import { Square, Activity, Volume2, VolumeX, Pause, Play, BookOpen, X } from "lucide-react";
 import { Button } from "@/components/ui/button";
+import { EXERCISES } from "@/pages/Guide";
 
 type Phase = 'warmup' | 'main' | 'cooldown';
 
@@ -24,6 +25,77 @@ const PHASE_COLORS: Record<Phase, string> = {
   main: 'text-primary',
   cooldown: 'text-teal-400',
 };
+
+const HELP_COPY = {
+  de: {
+    badge: "Technikhilfe",
+    currentMove: "Aktuelle Übung",
+    quickTip: "Kurz erklärt",
+    openGuide: "Im Guide öffnen",
+    pauseHint: "Das Training bleibt pausiert, bis du wieder auf Weiter gehst.",
+    ariaOpen: "Hilfe zur aktuellen Übung öffnen",
+    ariaClose: "Technikhilfe schließen",
+  },
+  en: {
+    badge: "Move Help",
+    currentMove: "Current move",
+    quickTip: "Quick cue",
+    openGuide: "Open guide",
+    pauseHint: "Training stays paused until you resume.",
+    ariaOpen: "Open help for the current move",
+    ariaClose: "Close move help",
+  },
+  fr: {
+    badge: "Aide mouvement",
+    currentMove: "Mouvement actuel",
+    quickTip: "Repère rapide",
+    openGuide: "Ouvrir le guide",
+    pauseHint: "L'entraînement reste en pause jusqu'à la reprise.",
+    ariaOpen: "Ouvrir l'aide du mouvement actuel",
+    ariaClose: "Fermer l'aide du mouvement",
+  },
+} as const;
+
+function getLeadSentence(text: string) {
+  const [firstSentence] = text.split(/(?<=[.!?])\s+/);
+  return firstSentence ?? text;
+}
+
+function getHelpAccent(moveId: string | null) {
+  if (!moveId) {
+    return {
+      border: "border-primary/25",
+      glow: "shadow-[0_20px_60px_rgba(255,35,94,0.18)]",
+      badge: "bg-primary/15 text-primary border-primary/25",
+      icon: "bg-primary/15 text-primary border-primary/25",
+    };
+  }
+
+  if (moveId.startsWith("w_")) {
+    return {
+      border: "border-orange-400/25",
+      glow: "shadow-[0_20px_60px_rgba(251,146,60,0.16)]",
+      badge: "bg-orange-400/15 text-orange-300 border-orange-400/25",
+      icon: "bg-orange-400/12 text-orange-300 border-orange-400/25",
+    };
+  }
+
+  if (moveId.startsWith("c_")) {
+    return {
+      border: "border-teal-400/25",
+      glow: "shadow-[0_20px_60px_rgba(45,212,191,0.16)]",
+      badge: "bg-teal-400/15 text-teal-300 border-teal-400/25",
+      icon: "bg-teal-400/12 text-teal-300 border-teal-400/25",
+    };
+  }
+
+  return {
+    border: "border-primary/25",
+    glow: "shadow-[0_20px_60px_rgba(255,35,94,0.18)]",
+    badge: "bg-primary/15 text-primary border-primary/25",
+    icon: "bg-primary/15 text-primary border-primary/25",
+  };
+}
 
 export default function ActiveTraining() {
   const [, setLocation] = useLocation();
@@ -52,6 +124,7 @@ export default function ActiveTraining() {
   const [currentPhase, setCurrentPhase] = useState<Phase>('warmup');
   const [isPaused, setIsPaused] = useState(false);
   const [showPauseDialog, setShowPauseDialog] = useState(false);
+  const [showHelpSheet, setShowHelpSheet] = useState(false);
   const [isMusicOn, setIsMusicOn] = useState(musicEnabled);
 
   const activeRef = useRef(true);
@@ -68,6 +141,7 @@ export default function ActiveTraining() {
   const cooldownIndexRef = useRef(0);
   const positionRef = useRef(0);
   const historyGuardRef = useRef(false);
+  const resumeAfterHelpRef = useRef(false);
 
   const config = TRAINING_CONFIGS[selectedTrainingType ?? 'complete'] ?? TRAINING_CONFIGS.complete;
 
@@ -188,6 +262,46 @@ export default function ActiveTraining() {
     setShowPauseDialog(false);
     doFinish();
   };
+
+  const openMoveHelp = useCallback(() => {
+    if (!currentMoveId) return;
+    if (!pausedRef.current) {
+      resumeAfterHelpRef.current = true;
+      pausedRef.current = true;
+      setIsPaused(true);
+      window.speechSynthesis.cancel();
+      if (isMusicOn) music.stop();
+    } else {
+      resumeAfterHelpRef.current = false;
+    }
+    setShowPauseDialog(false);
+    setShowHelpSheet(true);
+  }, [currentMoveId, isMusicOn, music]);
+
+  const closeMoveHelp = useCallback(() => {
+    setShowHelpSheet(false);
+    setShowPauseDialog(false);
+
+    if (resumeAfterHelpRef.current) {
+      resumeAfterHelpRef.current = false;
+      doResume();
+    }
+  }, [doResume]);
+
+  const openGuideForCurrentMove = useCallback(() => {
+    const basePath = import.meta.env.BASE_URL.replace(/\/$/, "");
+    const target = currentMoveId ? `${basePath}/guide#move-${currentMoveId}` : `${basePath}/guide`;
+    window.open(target, "_blank", "noopener,noreferrer");
+  }, [currentMoveId]);
+
+  useEffect(() => {
+    if (!showHelpSheet) return;
+    const handleKey = (event: KeyboardEvent) => {
+      if (event.key === "Escape") closeMoveHelp();
+    };
+    document.addEventListener("keydown", handleKey);
+    return () => document.removeEventListener("keydown", handleKey);
+  }, [closeMoveHelp, showHelpSheet]);
 
   const waitIfPaused = (): Promise<void> => {
     if (!pausedRef.current) return Promise.resolve();
@@ -397,6 +511,11 @@ export default function ActiveTraining() {
   };
 
   const progress = ((totalSeconds - timeLeft) / totalSeconds) * 100;
+  const helpCopy = HELP_COPY[language];
+  const helpAccent = getHelpAccent(currentMoveId);
+  const currentMoveDescription = currentMoveId ? getLeadSentence(tDesc(currentMoveId, language)) : "";
+  const currentExercise = currentMoveId ? EXERCISES.find((exercise) => exercise.id === currentMoveId) ?? null : null;
+  const CurrentMoveSvg = currentExercise?.svgComponent ?? null;
 
   const phaseLabel = config.isPhased
     ? (currentPhase === 'warmup'
@@ -473,16 +592,34 @@ export default function ActiveTraining() {
             )}
           </AnimatePresence>
           {currentMoveId && (
-            <a
-              href={`${import.meta.env.BASE_URL.replace(/\/$/, '')}/guide#move-${currentMoveId}`}
-              target="_blank"
-              rel="noopener noreferrer"
-              title={t('guideHelpTooltip' as any, language)}
-              className="absolute bottom-0 right-4 flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-white/8 border border-white/15 text-zinc-400 hover:text-white hover:bg-white/15 hover:border-white/30 transition-all text-xs font-semibold"
+            <motion.button
+              type="button"
+              initial={{ opacity: 0, y: 16 }}
+              animate={{ opacity: 1, y: 0 }}
+              whileHover={{ y: -2 }}
+              whileTap={{ scale: 0.98 }}
+              onClick={openMoveHelp}
+              aria-label={helpCopy.ariaOpen}
+              className={`absolute bottom-0 right-0 sm:right-2 flex items-center gap-3 px-3.5 py-2.5 rounded-2xl bg-zinc-900/88 backdrop-blur-xl border ${helpAccent.border} ${helpAccent.glow} text-left transition-all hover:bg-zinc-900/96`}
             >
-              <HelpCircle className="w-3.5 h-3.5" />
-              ?
-            </a>
+              <span className={`flex h-11 w-11 shrink-0 items-center justify-center rounded-xl border ${helpAccent.icon}`}>
+                {CurrentMoveSvg ? (
+                  <span className="w-8 h-8">
+                    <CurrentMoveSvg />
+                  </span>
+                ) : (
+                  <BookOpen className="w-4.5 h-4.5" />
+                )}
+              </span>
+              <span className="min-w-0">
+                <span className={`block text-[10px] font-bold uppercase tracking-[0.24em] ${helpAccent.badge} border rounded-full px-2 py-1 w-fit mb-1`}>
+                  {helpCopy.badge}
+                </span>
+                <span className="block text-sm font-semibold text-white truncate">
+                  {tMove(currentMoveId, language)}
+                </span>
+              </span>
+            </motion.button>
           )}
         </div>
 
@@ -527,7 +664,7 @@ export default function ActiveTraining() {
 
       {/* Pause / Stop dialog */}
       <AnimatePresence>
-        {showPauseDialog && (
+        {showPauseDialog && !showHelpSheet && (
           <motion.div
             initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }}
             className="fixed inset-0 z-50 flex items-end sm:items-center justify-center bg-black/70 backdrop-blur-sm p-4"
@@ -546,6 +683,96 @@ export default function ActiveTraining() {
                 <Square className="w-5 h-5 mr-2 fill-current" />
                 {t('stopTraining' as any, language)}
               </Button>
+            </motion.div>
+          </motion.div>
+        )}
+      </AnimatePresence>
+
+      <AnimatePresence>
+        {showHelpSheet && currentMoveId && (
+          <motion.div
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            className="fixed inset-0 z-[60] flex items-end sm:items-center justify-center bg-black/70 backdrop-blur-sm p-4"
+            onClick={closeMoveHelp}
+          >
+            <motion.div
+              initial={{ y: 32, opacity: 0, scale: 0.97 }}
+              animate={{ y: 0, opacity: 1, scale: 1 }}
+              exit={{ y: 20, opacity: 0, scale: 0.97 }}
+              transition={{ duration: 0.22, ease: [0.22, 1, 0.36, 1] }}
+              className={`w-full max-w-md rounded-3xl border ${helpAccent.border} bg-[#121622]/95 backdrop-blur-xl ${helpAccent.glow} overflow-hidden`}
+              onClick={(event) => event.stopPropagation()}
+              role="dialog"
+              aria-modal="true"
+            >
+              <div className="flex items-start justify-between gap-4 p-5 border-b border-white/8">
+                <div className="flex items-start gap-4">
+                  <div className={`flex h-14 w-14 shrink-0 items-center justify-center rounded-2xl border ${helpAccent.icon}`}>
+                    {CurrentMoveSvg ? (
+                      <span className="w-10 h-10">
+                        <CurrentMoveSvg />
+                      </span>
+                    ) : (
+                      <BookOpen className="w-5 h-5" />
+                    )}
+                  </div>
+                  <div className="space-y-1">
+                    <span className={`inline-flex items-center rounded-full border px-2.5 py-1 text-[10px] font-bold uppercase tracking-[0.24em] ${helpAccent.badge}`}>
+                      {helpCopy.currentMove}
+                    </span>
+                    <h2 className="text-2xl font-bold text-white">
+                      {tMove(currentMoveId, language)}
+                    </h2>
+                  </div>
+                </div>
+
+                <button
+                  type="button"
+                  onClick={closeMoveHelp}
+                  aria-label={helpCopy.ariaClose}
+                  className="rounded-full p-2 text-zinc-500 hover:bg-white/8 hover:text-white transition-colors"
+                >
+                  <X className="w-5 h-5" />
+                </button>
+              </div>
+
+              <div className="p-5 space-y-5">
+                <div className="space-y-2">
+                  <p className="text-xs font-bold uppercase tracking-[0.24em] text-zinc-500">
+                    {helpCopy.quickTip}
+                  </p>
+                  <p className="text-base leading-relaxed text-zinc-200">
+                    {currentMoveDescription}
+                  </p>
+                </div>
+
+                <div className="rounded-2xl border border-white/8 bg-white/[0.03] px-4 py-3">
+                  <p className="text-sm leading-relaxed text-zinc-400">
+                    {helpCopy.pauseHint}
+                  </p>
+                </div>
+
+                <div className="flex flex-col sm:flex-row gap-3">
+                  <Button
+                    type="button"
+                    className="flex-1 h-12 rounded-2xl"
+                    onClick={openGuideForCurrentMove}
+                  >
+                    <BookOpen className="w-4.5 h-4.5 mr-2" />
+                    {helpCopy.openGuide}
+                  </Button>
+                  <Button
+                    type="button"
+                    variant="outline"
+                    className="flex-1 h-12 rounded-2xl border-white/15 hover:bg-white/8"
+                    onClick={closeMoveHelp}
+                  >
+                    {t('closeCard' as any, language)}
+                  </Button>
+                </div>
+              </div>
             </motion.div>
           </motion.div>
         )}

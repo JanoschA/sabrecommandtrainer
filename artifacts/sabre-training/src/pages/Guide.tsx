@@ -484,13 +484,13 @@ function SvgRuecken() {
 
 type Category = 'fencing' | 'warmup' | 'cooldown';
 
-interface Exercise {
+export interface Exercise {
   id: string;
   category: Category;
   svgComponent: React.FC;
 }
 
-const EXERCISES: Exercise[] = [
+export const EXERCISES: Exercise[] = [
   { id: 'vor', category: 'fencing', svgComponent: SvgVor },
   { id: 'zurueck', category: 'fencing', svgComponent: SvgZurueck },
   { id: 'ausfall', category: 'fencing', svgComponent: SvgAusfall },
