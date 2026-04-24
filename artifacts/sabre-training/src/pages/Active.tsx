@@ -7,8 +7,9 @@ import { formatTime } from "@/lib/utils";
 import { useSpeech } from "@/hooks/use-speech";
 import { useMusic } from "@/hooks/use-music";
 import { TRAINING_CONFIGS, WARMUP_EXERCISE_LIST, COOLDOWN_EXERCISE_LIST, PHASE_BOUNDARIES, MOVE_DISPLACEMENT, SPACE_STEP_LIMITS } from "@/lib/training-config";
-import { Square, Activity, Volume2, VolumeX, Pause, Play, BookOpen, X } from "lucide-react";
+import { Square, Activity, Volume2, VolumeX, Pause, Play, BookOpen, X, ChevronRight } from "lucide-react";
 import { Button } from "@/components/ui/button";
+import Footer from "@/components/Footer";
 import { EXERCISES } from "@/pages/Guide";
 
 type Phase = 'warmup' | 'main' | 'cooldown';
@@ -514,6 +515,11 @@ export default function ActiveTraining() {
   const helpCopy = HELP_COPY[language];
   const helpAccent = getHelpAccent(currentMoveId);
   const currentMoveDescription = currentMoveId ? getLeadSentence(tDesc(currentMoveId, language)) : "";
+  const helpTapHint = language === "de"
+    ? "Tippen für Details"
+    : language === "fr"
+      ? "Touchez pour détails"
+      : "Tap for details";
   const currentExercise = currentMoveId ? EXERCISES.find((exercise) => exercise.id === currentMoveId) ?? null : null;
   const CurrentMoveSvg = currentExercise?.svgComponent ?? null;
 
@@ -533,7 +539,7 @@ export default function ActiveTraining() {
         transition={{ duration: 2, repeat: Infinity, ease: "easeInOut" }}
       />
 
-      <div className="flex-1 flex flex-col items-center p-4 md:p-6 relative z-10 w-full max-w-4xl mx-auto gap-5">
+      <div className="flex-1 flex flex-col items-center p-4 md:p-6 pb-16 md:pb-20 relative z-10 w-full max-w-4xl mx-auto gap-5">
 
         {/* Progress bar */}
         <div className="w-full h-1.5 bg-white/10 rounded-full overflow-hidden">
@@ -591,37 +597,47 @@ export default function ActiveTraining() {
               </motion.p>
             )}
           </AnimatePresence>
-          {currentMoveId && (
-            <motion.button
-              type="button"
-              initial={{ opacity: 0, y: 16 }}
-              animate={{ opacity: 1, y: 0 }}
-              whileHover={{ y: -2 }}
-              whileTap={{ scale: 0.98 }}
-              onClick={openMoveHelp}
-              aria-label={helpCopy.ariaOpen}
-              className={`absolute bottom-0 right-0 sm:right-2 flex items-center gap-3 px-3.5 py-2.5 rounded-2xl bg-zinc-900/88 backdrop-blur-xl border ${helpAccent.border} ${helpAccent.glow} text-left transition-all hover:bg-zinc-900/96`}
-            >
-              <span className={`flex h-11 w-11 shrink-0 items-center justify-center rounded-xl border ${helpAccent.icon}`}>
-                {CurrentMoveSvg ? (
-                  <span className="w-8 h-8">
-                    <CurrentMoveSvg />
-                  </span>
-                ) : (
-                  <BookOpen className="w-4.5 h-4.5" />
-                )}
-              </span>
-              <span className="min-w-0">
-                <span className={`block text-[10px] font-bold uppercase tracking-[0.24em] ${helpAccent.badge} border rounded-full px-2 py-1 w-fit mb-1`}>
-                  {helpCopy.badge}
+        </div>
+
+        {currentMoveId && (
+          <motion.button
+            type="button"
+            initial={{ opacity: 0, y: 16 }}
+            animate={{ opacity: 1, y: 0 }}
+            whileHover={{ y: -2 }}
+            whileTap={{ scale: 0.99 }}
+            onClick={openMoveHelp}
+            aria-label={helpCopy.ariaOpen}
+            className={`w-full max-w-sm flex items-start gap-3 px-4 py-4 rounded-2xl bg-zinc-900/88 backdrop-blur-xl border ${helpAccent.border} text-left transition-all hover:bg-zinc-900/96`}
+          >
+            <span className={`flex h-12 w-12 shrink-0 items-center justify-center rounded-xl border ${helpAccent.icon}`}>
+              {CurrentMoveSvg ? (
+                <span className="w-8 h-8">
+                  <CurrentMoveSvg />
                 </span>
-                <span className="block text-sm font-semibold text-white truncate">
-                  {tMove(currentMoveId, language)}
+              ) : (
+                <BookOpen className="w-4.5 h-4.5" />
+              )}
+            </span>
+            <span className="min-w-0 flex-1">
+              <span className={`inline-flex items-center text-[10px] font-bold uppercase tracking-[0.24em] ${helpAccent.badge} border rounded-full px-2 py-1 mb-2`}>
+                {helpCopy.badge}
+              </span>
+              <span className="block text-sm font-semibold text-white">
+                {tMove(currentMoveId, language)}
+              </span>
+                {currentMoveDescription && (
+                  <span className="block mt-1.5 text-sm leading-relaxed text-zinc-400">
+                    {currentMoveDescription}
+                  </span>
+                )}
+                <span className="inline-flex items-center gap-1.5 mt-3 text-xs font-semibold text-zinc-300">
+                  {helpTapHint}
+                  <ChevronRight className="w-3.5 h-3.5" />
                 </span>
               </span>
             </motion.button>
           )}
-        </div>
 
         {/* Volume controls */}
         <div className="w-full max-w-sm space-y-3 bg-white/5 rounded-2xl p-4 border border-white/8">
@@ -661,6 +677,8 @@ export default function ActiveTraining() {
           )}
         </div>
       </div>
+
+      <Footer />
 
       {/* Pause / Stop dialog */}
       <AnimatePresence>
