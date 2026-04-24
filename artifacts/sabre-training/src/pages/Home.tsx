@@ -484,7 +484,7 @@ export default function Home() {
           style={{
             backgroundImage: `url(${import.meta.env.BASE_URL}images/${HERO_BACKGROUND_IMAGE})`,
             backgroundSize: "cover",
-            backgroundPosition: "68% center",
+            backgroundPosition: "64% center",
           }}
         />
         <div className="absolute inset-0 z-0 pointer-events-none opacity-20 mix-blend-screen">
@@ -497,7 +497,7 @@ export default function Home() {
         <div className="absolute inset-0 z-0 bg-[radial-gradient(circle_at_62%_42%,transparent_0%,rgba(8,10,20,0.08)_24%,rgba(8,10,20,0.62)_82%)]" />
         <div className="absolute inset-0 z-0 bg-[linear-gradient(180deg,rgba(8,10,20,0.1)_0%,rgba(8,10,20,0.24)_32%,rgba(8,10,20,0.58)_100%)]" />
 
-        <header className="absolute top-0 w-full p-6 flex justify-end z-20">
+        <header className="absolute top-0 w-full p-4 sm:p-6 flex justify-end z-20">
           <LanguageToggle />
         </header>
 
@@ -505,38 +505,47 @@ export default function Home() {
           initial={{ opacity: 0, y: 30 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.8, ease: "easeOut" }}
-          className="relative z-10 flex flex-col items-center text-center px-4 max-w-3xl"
+          className="relative z-10 flex flex-col items-center text-center px-4 sm:px-6 max-w-3xl w-full"
         >
           <h1
-            className={`max-w-4xl text-5xl md:text-7xl text-white mb-6 leading-[1.14] md:leading-[1.08] drop-shadow-[0_8px_30px_rgba(0,0,0,0.28)] ${heroTitleClass}`}
+            className={`max-w-[13rem] sm:max-w-4xl text-[1.72rem] sm:text-5xl md:text-7xl text-white mb-4 sm:mb-6 leading-[1.02] sm:leading-[1.12] md:leading-[1.08] drop-shadow-[0_8px_30px_rgba(0,0,0,0.28)] ${heroTitleClass}`}
           >
-            {heroTitle}
+            {language === "de" ? (
+              <>
+                <span className="block sm:hidden">{"S\u00E4belfechten"}</span>
+                <span className="block sm:hidden">Kommando-</span>
+                <span className="block sm:hidden">training</span>
+                <span className="hidden sm:block">{heroTitle}</span>
+              </>
+            ) : (
+              heroTitle
+            )}
           </h1>
 
-          <p className="text-lg md:text-xl text-zinc-300 mb-12 max-w-xl leading-relaxed">
+          <p className="text-base sm:text-lg md:text-xl text-zinc-300 mb-8 sm:mb-12 max-w-[22rem] sm:max-w-xl leading-relaxed">
             {t("appDesc", language)}
           </p>
 
-          <div className="flex flex-col sm:flex-row gap-4 w-full sm:w-auto">
+          <div className="flex flex-col sm:flex-row gap-3 sm:gap-4 w-full max-w-sm sm:max-w-none sm:w-auto">
             <Link href="/select" className="w-full sm:w-auto">
-              <Button size="lg" className="w-full text-lg h-16 group">
+              <Button size="lg" className="w-full text-base sm:text-lg h-14 sm:h-16 group">
                 <Play className="w-5 h-5 mr-2 fill-current group-hover:scale-110 transition-transform" />
                 {t("start", language)}
               </Button>
             </Link>
             <Link href="/history" className="w-full sm:w-auto">
-              <Button size="lg" variant="glass" className="w-full text-lg h-16">
+              <Button size="lg" variant="glass" className="w-full text-base sm:text-lg h-14 sm:h-16">
                 <History className="w-5 h-5 mr-2" />
                 {t("history", language)}
               </Button>
             </Link>
           </div>
-          <div className="mt-4">
+          <div className="mt-3 sm:mt-4">
             <Link href="/guide">
               <Button
                 variant="ghost"
                 size="sm"
-                className="text-zinc-400 hover:text-white gap-2 border border-white/10 hover:border-white/25 backdrop-blur-sm bg-white/3"
+                className="text-zinc-400 hover:text-white gap-2 border border-white/10 hover:border-white/25 backdrop-blur-sm bg-white/3 text-xs sm:text-sm"
               >
                 <BookOpen className="w-4 h-4" />
                 {t("guideButton" as any, language)}
@@ -546,7 +555,7 @@ export default function Home() {
         </motion.div>
 
         <motion.div
-          className="absolute bottom-8 left-1/2 -translate-x-1/2 z-10 flex flex-col items-center text-zinc-500 cursor-pointer"
+          className="absolute bottom-6 sm:bottom-8 left-1/2 -translate-x-1/2 z-10 flex flex-col items-center text-zinc-500 cursor-pointer"
           animate={{ y: [0, 8, 0] }}
           transition={{ duration: 1.8, repeat: Infinity, ease: "easeInOut" }}
           onClick={() => {
@@ -555,7 +564,7 @@ export default function Home() {
               ?.scrollIntoView({ behavior: "smooth" });
           }}
         >
-          <span className="text-xs tracking-widest uppercase mb-1">
+          <span className="text-[11px] sm:text-xs tracking-[0.22em] uppercase mb-1">
             {language === "de"
               ? "Mehr erfahren"
               : language === "fr"

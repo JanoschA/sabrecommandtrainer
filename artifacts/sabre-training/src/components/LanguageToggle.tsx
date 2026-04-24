@@ -18,7 +18,7 @@ export function LanguageToggle() {
           key={l.code}
           onClick={() => setLanguage(l.code)}
           className={cn(
-            "px-3 py-1 rounded-full text-xs font-bold transition-all",
+            "px-2.5 sm:px-3 py-1 rounded-full text-[11px] sm:text-xs font-bold transition-all min-w-[2.4rem] sm:min-w-[2.75rem]",
             language === l.code 
               ? "bg-primary text-white shadow-md shadow-primary/30" 
               : "text-muted-foreground hover:text-white hover:bg-white/5"
