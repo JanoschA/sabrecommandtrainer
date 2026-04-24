@@ -1,0 +1,10 @@
+.git
+.github
+node_modules
+artifacts/*/node_modules
+lib/*/node_modules
+scripts/node_modules
+artifacts/sabre-training/dist
+artifacts/api-server/dist
+*.log
+.DS_Store

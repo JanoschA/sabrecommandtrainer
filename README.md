@@ -168,6 +168,16 @@ Useful options:
 - Express
 - OpenAPI + generated client/schema packages
 
+## Deployment
+
+For a minimal AWS setup, the repository includes a Lightsail deployment path with:
+
+- a single Docker image for frontend + API
+- a Lightsail bootstrap file
+- a GitHub Actions workflow that redeploys on pushes to `master`
+
+See [deploy/aws/lightsail/README.md](deploy/aws/lightsail/README.md).
+
 ## License
 
 The source code in this repository is licensed under the MIT License. See [LICENSE](LICENSE).

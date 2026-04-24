@@ -1,0 +1,65 @@
+name: Deploy to AWS Lightsail
+
+on:
+  push:
+    branches:
+      - master
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@v4
+
+      - name: Prepare SSH key
+        run: |
+          mkdir -p ~/.ssh
+          printf "%s" "${{ secrets.AWS_LIGHTSAIL_SSH_KEY }}" > ~/.ssh/lightsail
+          chmod 600 ~/.ssh/lightsail
+
+      - name: Sync repository to server
+        env:
+          DEPLOY_HOST: ${{ secrets.AWS_LIGHTSAIL_HOST }}
+          DEPLOY_USER: ${{ secrets.AWS_LIGHTSAIL_USER }}
+        run: |
+          ssh -i ~/.ssh/lightsail -o StrictHostKeyChecking=no "${DEPLOY_USER}@${DEPLOY_HOST}" "mkdir -p /opt/fechttrainer/app"
+          rsync -az --delete \
+            --exclude ".git/" \
+            --exclude "node_modules/" \
+            --exclude "artifacts/sabre-training/dist/" \
+            --exclude "artifacts/api-server/dist/" \
+            -e "ssh -i ~/.ssh/lightsail -o StrictHostKeyChecking=no" \
+            ./ "${DEPLOY_USER}@${DEPLOY_HOST}:/opt/fechttrainer/app/"
+
+      - name: Create production environment file
+        run: |
+          cat > .env.production <<EOF
+          CONTACT_EMAIL=${{ secrets.CONTACT_EMAIL }}
+          SMTP_HOST=${{ secrets.SMTP_HOST }}
+          SMTP_PORT=${{ secrets.SMTP_PORT }}
+          SMTP_USER=${{ secrets.SMTP_USER }}
+          SMTP_PASS=${{ secrets.SMTP_PASS }}
+          TURNSTILE_SITE_KEY=${{ secrets.TURNSTILE_SITE_KEY }}
+          TURNSTILE_SECRET_KEY=${{ secrets.TURNSTILE_SECRET_KEY }}
+          VITE_CONTACT_EMAIL=${{ secrets.CONTACT_EMAIL }}
+          EOF
+
+      - name: Upload production environment file
+        env:
+          DEPLOY_HOST: ${{ secrets.AWS_LIGHTSAIL_HOST }}
+          DEPLOY_USER: ${{ secrets.AWS_LIGHTSAIL_USER }}
+        run: |
+          scp -i ~/.ssh/lightsail -o StrictHostKeyChecking=no .env.production "${DEPLOY_USER}@${DEPLOY_HOST}:/opt/fechttrainer/app/deploy/aws/lightsail/.env.production"
+
+      - name: Deploy application
+        env:
+          DEPLOY_HOST: ${{ secrets.AWS_LIGHTSAIL_HOST }}
+          DEPLOY_USER: ${{ secrets.AWS_LIGHTSAIL_USER }}
+        run: |
+          ssh -i ~/.ssh/lightsail -o StrictHostKeyChecking=no "${DEPLOY_USER}@${DEPLOY_HOST}" "
+            cd /opt/fechttrainer/app &&
+            chmod +x deploy/aws/lightsail/deploy.sh &&
+            ./deploy/aws/lightsail/deploy.sh
+          "

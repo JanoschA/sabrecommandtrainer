@@ -1,4 +1,4 @@
-import { translations, type Language } from "@/lib/i18n";
+import { translations, type Language } from "./i18n";
 
 const AUDIO_ID_TO_SUBFOLDER: Record<string, string> = {
   vor: "training",
