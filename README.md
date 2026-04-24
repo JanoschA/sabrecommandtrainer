@@ -130,6 +130,31 @@ The frontend will be available at:
 - The contact form only works when the backend is running and valid SMTP plus Cloudflare Turnstile credentials are configured.
 - The Turnstile keys above are Cloudflare's official test keys for local development. Replace them with your real widget keys before going live.
 
+## Batch Voice Generation
+
+Existing localized move labels can be turned into MP3 files in one run via the ElevenLabs API.
+
+Set your API key and one voice ID per language:
+
+```bash
+export ELEVENLABS_API_KEY="your-api-key"
+export ELEVENLABS_VOICE_ID_EN="your-english-voice-id"
+export ELEVENLABS_VOICE_ID_FR="your-french-voice-id"
+```
+
+Then generate missing audio files:
+
+```bash
+pnpm --filter @workspace/scripts run generate:audio -- --langs en,fr
+```
+
+Useful options:
+
+- `--overwrite` regenerates files that already exist
+- `--dry-run` prints the planned output without calling the API
+- `--categories training,warmup,cooldown,motivation` limits the batch to selected groups
+- Training commands are generated with expressive prompt tags by default, so `eleven_v3` is the recommended model for this workflow
+
 ## Tech Stack
 
 - React

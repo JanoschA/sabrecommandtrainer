@@ -1,4 +1,5 @@
 import { useCallback, useEffect, useRef } from 'react';
+import { AUDIO_SUBFOLDER, resolveAudioFileKey } from '@/lib/audio-files';
 import { Language } from '@/lib/i18n';
 
 const LANG_MAP: Record<Language, string> = {
@@ -11,82 +12,26 @@ function pickVoice(lang: Language): SpeechSynthesisVoice | null {
   const voices = window.speechSynthesis.getVoices();
   const code = LANG_MAP[lang];
   const prefix = code.slice(0, 2);
-  const exact = voices.filter(v => v.localService && v.lang === code);
+  const exact = voices.filter((v) => v.localService && v.lang === code);
   if (exact.length) return exact[0];
-  const anyLocal = voices.filter(v => v.localService && v.lang.startsWith(prefix));
+  const anyLocal = voices.filter((v) => v.localService && v.lang.startsWith(prefix));
   if (anyLocal.length) return anyLocal[0];
-  const exactRemote = voices.filter(v => v.lang === code);
+  const exactRemote = voices.filter((v) => v.lang === code);
   if (exactRemote.length) return exactRemote[0];
-  const anyRemote = voices.filter(v => v.lang.startsWith(prefix));
+  const anyRemote = voices.filter((v) => v.lang.startsWith(prefix));
   if (anyRemote.length) return anyRemote[0];
   return null;
 }
 
-/**
- * Converts a spoken label to an audio file key.
- * E.g. "w_laufen" → "w_laufen", "vor" → "vor"
- * This key maps to: public/audio/{lang}/{subfolder}/{key}.mp3
- */
-function labelToFileKey(text: string): string {
-  return text
-    .toLowerCase()
-    .replace(/ä/g, 'ae').replace(/ö/g, 'oe').replace(/ü/g, 'ue').replace(/ß/g, 'ss')
-    .replace(/[^a-z0-9_]/g, '_')
-    .replace(/_+/g, '_')
-    .replace(/^_|_$/g, '');
-}
-
 const BASE = import.meta.env.BASE_URL ?? '/';
 
-const AUDIO_SUBFOLDER: Record<string, string> = {
-  laufen: 'aufwaermen',
-  hampelmann: 'aufwaermen',
-  knie_heben: 'aufwaermen',
-  arme_kreisen: 'aufwaermen',
-  schultern_kreisen: 'aufwaermen',
-  rumpf_drehen: 'aufwaermen',
-  leichte_spruenge: 'aufwaermen',
-  tiefe_hocke: 'aufwaermen',
-  tief_atmen: 'abkuehlen',
-  schulter_dehnen: 'abkuehlen',
-  wade_dehnen: 'abkuehlen',
-  oberschenkel_dehnen: 'abkuehlen',
-  seitendehnung: 'abkuehlen',
-  nacken_lockern: 'abkuehlen',
-  langsam_gehen: 'abkuehlen',
-  ruecken_dehnen: 'abkuehlen',
-  en_garde: 'training',
-  vor: 'training',
-  zurueck: 'training',
-  ausfall: 'training',
-  quart: 'training',
-  terz: 'training',
-  quint: 'training',
-  riposte: 'training',
-  balestra: 'training',
-  motiv_1: 'motivation',
-  motiv_2: 'motivation',
-  motiv_3: 'motivation',
-  motiv_4: 'motivation',
-  motiv_5: 'motivation',
-  motiv_6: 'motivation',
-};
-
-/**
- * Module-level audio cache: key → HTMLAudioElement
- * Persists across hook re-renders and component re-mounts.
- */
 const audioCache = new Map<string, HTMLAudioElement>();
 
-/**
- * Preload all known audio files for the given language into the cache.
- * Each Audio element gets preload="auto" and is immediately buffered via .load().
- */
 function preloadAudioFiles(lang: Language): void {
-  for (const [key, subfolder] of Object.entries(AUDIO_SUBFOLDER)) {
-    const cacheKey = `${lang}:${key}`;
+  for (const [baseKey, subfolder] of Object.entries(AUDIO_SUBFOLDER)) {
+    const cacheKey = `${lang}:${baseKey}`;
     if (audioCache.has(cacheKey)) continue;
-    const url = `${BASE}audio/${lang}/${subfolder}/${key}.mp3`;
+    const url = `${BASE}audio/${lang}/${subfolder}/${baseKey}.mp3`;
     const audio = new Audio(url);
     audio.preload = 'auto';
     audio.load();
@@ -94,20 +39,14 @@ function preloadAudioFiles(lang: Language): void {
   }
 }
 
-/**
- * Try to play a custom audio file from public/audio/{lang}/{subfolder}/{key}.mp3
- * Uses the preloaded cache when available.
- * Returns true if played successfully, false if file not found or error.
- */
 function tryPlayAudioFile(key: string, lang: Language, volume: number): Promise<boolean> {
   const subfolder = AUDIO_SUBFOLDER[key];
   if (!subfolder) return Promise.resolve(false);
 
-  return new Promise(resolve => {
+  return new Promise((resolve) => {
     const cacheKey = `${lang}:${key}`;
     const cached = audioCache.get(cacheKey);
 
-    // If cached but already in a failed/no-source state, skip immediately
     if (cached) {
       if (
         cached.error !== null ||
@@ -122,7 +61,6 @@ function tryPlayAudioFile(key: string, lang: Language, volume: number): Promise<
     if (cached) {
       audio = cached;
       isCached = true;
-      // Rewind so it can be replayed
       audio.currentTime = 0;
     } else {
       const url = `${BASE}audio/${lang}/${subfolder}/${key}.mp3`;
@@ -154,14 +92,11 @@ function tryPlayAudioFile(key: string, lang: Language, volume: number): Promise<
     let timeout: ReturnType<typeof setTimeout>;
 
     if (audio.readyState >= HTMLMediaElement.HAVE_ENOUGH_DATA) {
-      // Already buffered — play immediately (no timeout needed)
       audio.play().catch(() => settle(false));
     } else if (isCached) {
-      // Cached but still loading — wait up to 3000ms
       timeout = setTimeout(() => settle(false), 3000);
       audio.addEventListener('canplaythrough', onCanPlay, { once: true });
     } else {
-      // Not cached — original short-timeout path (600ms)
       timeout = setTimeout(() => {
         audio.src = '';
         settle(false);
@@ -183,22 +118,21 @@ export function useSpeech(language: Language, volumeRef?: React.MutableRefObject
     return () => window.speechSynthesis.removeEventListener('voiceschanged', h);
   }, []);
 
-  /**
-   * Speak a label. First tries public/audio/{lang}/{subfolder}/{key}.mp3.
-   * Falls back to Web Speech API TTS if no file found or key is unmapped.
-   * Resolves when speech/audio finishes OR when stopAll() is called.
-   */
   const speak = useCallback((text: string, fileKey?: string): Promise<void> => {
     if (isCancelledRef.current) return Promise.resolve();
 
     return new Promise<void>(async (resolve) => {
-      if (isCancelledRef.current) { resolve(); return; }
+      if (isCancelledRef.current) {
+        resolve();
+        return;
+      }
 
       forceResolveRef.current = resolve;
       const vol = volumeRef?.current ?? 1.0;
-      const resolvedFileKey = fileKey ?? labelToFileKey(text);
+      const resolvedFileKey = fileKey
+        ? resolveAudioFileKey(fileKey, language, text)
+        : resolveAudioFileKey(text, language, text);
 
-      // ── Try audio file first ──────────────────────────────────────────────
       const played = await tryPlayAudioFile(resolvedFileKey, language, vol);
       if (played) {
         if (forceResolveRef.current === resolve) forceResolveRef.current = null;
@@ -206,8 +140,10 @@ export function useSpeech(language: Language, volumeRef?: React.MutableRefObject
         return;
       }
 
-      // ── Fall back to Web Speech API TTS ───────────────────────────────────
-      if (isCancelledRef.current) { resolve(); return; }
+      if (isCancelledRef.current) {
+        resolve();
+        return;
+      }
 
       window.speechSynthesis.cancel();
       forceResolveRef.current = resolve;
@@ -221,7 +157,6 @@ export function useSpeech(language: Language, volumeRef?: React.MutableRefObject
       const voice = pickVoice(language);
       if (voice) utterance.voice = voice;
 
-      // Safety timeout: max 8s
       const safetyTimer = setTimeout(() => {
         if (forceResolveRef.current === resolve) {
           forceResolveRef.current = null;
@@ -241,10 +176,6 @@ export function useSpeech(language: Language, volumeRef?: React.MutableRefObject
     });
   }, [language, volumeRef]);
 
-  /**
-   * Stop all speech immediately and force-resolve any pending speak() call.
-   * This unblocks the command loop so it can exit cleanly.
-   */
   const stopAll = useCallback(() => {
     isCancelledRef.current = true;
     window.speechSynthesis.cancel();
@@ -254,7 +185,9 @@ export function useSpeech(language: Language, volumeRef?: React.MutableRefObject
     }
   }, []);
 
-  const resetCancelled = useCallback(() => { isCancelledRef.current = false; }, []);
+  const resetCancelled = useCallback(() => {
+    isCancelledRef.current = false;
+  }, []);
 
   const initSpeech = useCallback(() => {
     isCancelledRef.current = false;
