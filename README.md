@@ -1,12 +1,16 @@
-# Sabre Fencing Drill Trainer
+# Sabre Command Trainer
 
-Sabre Fencing Drill Trainer is a browser-based training app for sabre fencers who want a fast, structured way to practice footwork, reactions, and command-based drills. It combines a focused athletic UI with spoken commands, adjustable drill settings, local session history, and a lightweight API for selected server-side features.
+Sabre Command Trainer is a browser-based training app for sabre fencers who want a fast, structured way to practice footwork, reactions, and command-based drills. It combines a focused athletic UI with spoken commands, adjustable drill settings, local session history, and a lightweight API for selected server-side features.
 
 The project is built as a pnpm workspace monorepo with a React/Vite frontend and an Express backend. The training flow is designed to work well for solo practice sessions, from warm-up to active drills and final session review.
 
 ## Live Website
 
 [https://sabrecommandtrainer.com](https://sabrecommandtrainer.com)
+
+## Repository
+
+`JanoschA/sabrecommandtrainer`
 
 ## Features
 
@@ -66,7 +70,7 @@ pnpm install
 Start the backend in one terminal:
 
 ```bash
-cd /path/to/FechtTrainer
+cd /path/to/sabrecommandtrainer
 export PORT=8080
 export CONTACT_EMAIL="your@email.com"
 export SMTP_HOST="your.smtp.host"
@@ -82,7 +86,7 @@ pnpm --filter @workspace/api-server run start
 Start the frontend in a second terminal:
 
 ```bash
-cd /path/to/FechtTrainer
+cd /path/to/sabrecommandtrainer
 export PORT=21212
 export BASE_PATH=/
 export API_PROXY_TARGET=http://localhost:8080
@@ -98,7 +102,7 @@ The frontend will be available at:
 Start the backend in one PowerShell window:
 
 ```powershell
-Set-Location C:\path\to\FechtTrainer
+Set-Location C:\path\to\sabrecommandtrainer
 $env:PORT="8080"
 $env:CONTACT_EMAIL="your@email.com"
 $env:SMTP_HOST="your.smtp.host"
@@ -114,7 +118,7 @@ pnpm --filter @workspace/api-server run start
 Start the frontend in a second PowerShell window:
 
 ```powershell
-Set-Location C:\path\to\FechtTrainer
+Set-Location C:\path\to\sabrecommandtrainer
 $env:PORT="21212"
 $env:BASE_PATH="/"
 $env:API_PROXY_TARGET="http://localhost:8080"

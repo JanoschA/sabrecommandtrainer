@@ -1,5 +1,10 @@
 # AWS Lightsail Deployment
 
+This deployment belongs to:
+
+- website: [https://sabrecommandtrainer.com](https://sabrecommandtrainer.com)
+- repository: `JanoschA/sabrecommandtrainer`
+ 
 This setup is intentionally minimal:
 
 - one Ubuntu Lightsail instance
@@ -7,10 +12,6 @@ This setup is intentionally minimal:
 - one Caddy container that handles HTTPS and reverse-proxies to the app
 - one GitHub Actions workflow that builds the image on GitHub
 - Lightsail only pulls the finished image and redeploys it on every push to `master`
-
-Current production website:
-
-[https://sabrecommandtrainer.com](https://sabrecommandtrainer.com)
 
 ## 1. Create the instance
 
@@ -136,7 +137,7 @@ Create a GitHub personal access token (classic):
 
 Recommended settings:
 
-- name: `fechttrainer-ghcr-read`
+- name: `sabrecommandtrainer-ghcr-read`
 - expiration: whatever you prefer
 - scope: `read:packages`
 
