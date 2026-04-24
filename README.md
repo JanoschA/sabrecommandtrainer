@@ -4,6 +4,10 @@ Sabre Fencing Drill Trainer is a browser-based training app for sabre fencers wh
 
 The project is built as a pnpm workspace monorepo with a React/Vite frontend and an Express backend. The training flow is designed to work well for solo practice sessions, from warm-up to active drills and final session review.
 
+## Live Website
+
+[https://sabrecommandtrainer.com](https://sabrecommandtrainer.com)
+
 ## Features
 
 - Multiple training modes, including complete training, drill, warm-up, cool-down, coordination, and footwork focus
@@ -182,7 +186,7 @@ Recommended first-time setup:
 1. Create a small Ubuntu Lightsail instance
 2. Open at least ports `22`, `80`, and `443` in the Lightsail firewall
 3. Point your production domain to the instance's static IP
-3. SSH into the server and install Docker manually once:
+4. SSH into the server and install Docker manually once:
 
 ```bash
 sudo apt-get update
@@ -200,15 +204,15 @@ sudo mkdir -p /opt/fechttrainer/app
 sudo chown -R ubuntu:ubuntu /opt/fechttrainer
 ```
 
-4. Reconnect once and verify:
+5. Reconnect once and verify:
 
 ```bash
 docker --version
 docker compose version
 ```
 
-5. Add the required GitHub repository secrets
-6. Push to `master` to trigger the deploy workflow
+6. Add the required GitHub repository secrets
+7. Push to `master` to trigger the deploy workflow
 
 For GHCR access, create a GitHub personal access token (classic) with `read:packages`, store it as `GHCR_TOKEN`, and store your GitHub username as `GHCR_USERNAME`.
 

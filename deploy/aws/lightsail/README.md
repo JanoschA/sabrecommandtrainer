@@ -8,6 +8,10 @@ This setup is intentionally minimal:
 - one GitHub Actions workflow that builds the image on GitHub
 - Lightsail only pulls the finished image and redeploys it on every push to `master`
 
+Current production website:
+
+[https://sabrecommandtrainer.com](https://sabrecommandtrainer.com)
+
 ## 1. Create the instance
 
 Create a small Ubuntu Lightsail instance and make sure the IPv4 firewall includes at least:
