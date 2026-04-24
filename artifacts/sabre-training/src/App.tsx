@@ -1,8 +1,11 @@
+import { useEffect } from "react";
 import { Switch, Route, Router as WouterRouter } from "wouter";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { Toaster } from "@/components/ui/toaster";
 import { TooltipProvider } from "@/components/ui/tooltip";
 import NotFound from "@/pages/not-found";
+import { useTrainingStore } from "@/store/use-training-store";
+import { t } from "@/lib/i18n";
 
 import Home from "@/pages/Home";
 import SelectTraining from "@/pages/Select";
@@ -43,6 +46,12 @@ function Router() {
 }
 
 function App() {
+  const { language } = useTrainingStore();
+
+  useEffect(() => {
+    document.title = t("appTitle", language);
+  }, [language]);
+
   return (
     <QueryClientProvider client={queryClient}>
       <TooltipProvider>
