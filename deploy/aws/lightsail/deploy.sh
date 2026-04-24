@@ -11,8 +11,16 @@ if [[ ! -f "${SCRIPT_DIR}/.env.production" ]]; then
   exit 1
 fi
 
-docker compose -f "${SCRIPT_DIR}/compose.yaml" down --remove-orphans
-docker compose -f "${SCRIPT_DIR}/compose.yaml" up -d --build
+set -a
+source "${SCRIPT_DIR}/.env.production"
+set +a
+
+if [[ -n "${GHCR_USERNAME:-}" && -n "${GHCR_TOKEN:-}" ]]; then
+  printf '%s' "${GHCR_TOKEN}" | docker login ghcr.io -u "${GHCR_USERNAME}" --password-stdin
+fi
+
+docker compose -f "${SCRIPT_DIR}/compose.yaml" pull
+docker compose -f "${SCRIPT_DIR}/compose.yaml" up -d --remove-orphans
 
 sleep 5
 curl --fail --silent http://127.0.0.1/api/healthz >/dev/null

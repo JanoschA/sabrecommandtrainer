@@ -1,9 +1,7 @@
 services:
   app:
     container_name: fechttrainer-app
-    build:
-      context: ../../..
-      dockerfile: Dockerfile
+    image: ${APP_IMAGE:?APP_IMAGE is required}
     env_file:
       - .env.production
     environment:

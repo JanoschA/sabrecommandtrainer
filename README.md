@@ -174,7 +174,7 @@ For a minimal AWS setup, the repository includes a Lightsail deployment path wit
 
 - a single Docker image for frontend + API
 - a Lightsail bootstrap file
-- a GitHub Actions workflow that redeploys on pushes to `master`
+- a GitHub Actions workflow that builds the image on GitHub, pushes it to GHCR, and redeploys on pushes to `master`
 
 Recommended first-time setup:
 
@@ -207,6 +207,8 @@ docker compose version
 
 5. Add the required GitHub repository secrets
 6. Push to `master` to trigger the deploy workflow
+
+For GHCR access, create a GitHub personal access token (classic) with `read:packages`, store it as `GHCR_TOKEN`, and store your GitHub username as `GHCR_USERNAME`.
 
 For the full Lightsail notes, including secrets and optional `cloud-init`, see [deploy/aws/lightsail/README.md](deploy/aws/lightsail/README.md).
 

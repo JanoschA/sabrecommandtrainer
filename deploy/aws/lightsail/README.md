@@ -4,7 +4,8 @@ This setup is intentionally minimal:
 
 - one Ubuntu Lightsail instance
 - one Docker container that serves both the frontend and the API
-- one GitHub Actions workflow that redeploys on every push to `master`
+- one GitHub Actions workflow that builds the image on GitHub
+- Lightsail only pulls the finished image and redeploys it on every push to `master`
 
 ## 1. Create the instance
 
@@ -73,6 +74,8 @@ Add these repository secrets:
 - `AWS_LIGHTSAIL_HOST`
 - `AWS_LIGHTSAIL_USER`
 - `AWS_LIGHTSAIL_SSH_KEY`
+- `GHCR_USERNAME`
+- `GHCR_TOKEN`
 - `CONTACT_EMAIL`
 - `SMTP_HOST`
 - `SMTP_PORT`
@@ -83,20 +86,45 @@ Add these repository secrets:
 
 `AWS_LIGHTSAIL_HOST` should be the public IPv4 address or the static IP of the instance.  
 `AWS_LIGHTSAIL_USER` is usually `ubuntu`.  
-`AWS_LIGHTSAIL_SSH_KEY` should be the full private key content for the instance user.
+`AWS_LIGHTSAIL_SSH_KEY` should be the full private key content for the instance user.  
+`GHCR_USERNAME` is your GitHub username.  
+`GHCR_TOKEN` should be a GitHub token with at least `read:packages` so the server can pull from GHCR.
+
+### Create `GHCR_TOKEN`
+
+Create a GitHub personal access token (classic):
+
+1. GitHub -> `Settings`
+2. `Developer settings`
+3. `Personal access tokens`
+4. `Tokens (classic)`
+5. `Generate new token (classic)`
+
+Recommended settings:
+
+- name: `fechttrainer-ghcr-read`
+- expiration: whatever you prefer
+- scope: `read:packages`
+
+Then save the token as the `GHCR_TOKEN` repository secret and your GitHub username as `GHCR_USERNAME`.
+
+If your GHCR package stays private, the server needs those credentials permanently to pull updates.
 
 ## 5. Deployment flow
 
 On every push to `master`, GitHub Actions will:
 
-1. sync the repository to `/opt/fechttrainer/app`
-2. write `deploy/aws/lightsail/.env.production`
-3. run [deploy.sh](./deploy.sh)
+1. build the Docker image on GitHub
+2. push it to GHCR
+3. sync the repository to `/opt/fechttrainer/app`
+4. write `deploy/aws/lightsail/.env.production`
+5. run [deploy.sh](./deploy.sh)
 
-The container then:
+The server then:
 
-- builds the React frontend
-- builds the Express API
+- logs into GHCR if credentials are present
+- pulls the new image
+- restarts the container
 - serves `/api/*` through Express
 - serves the built frontend from the same process
 
@@ -106,6 +134,7 @@ The container then:
 - The frontend and backend run on the same origin
 - The contact form uses the production SMTP and Turnstile secrets from GitHub Actions
 - The GitHub workflow runs on pushes to `master`, so a local commit alone does not deploy anything until it is pushed
+- This setup is much friendlier to small Lightsail instances because Docker builds no longer run on the server
 
 ## 7. Later improvements
 
