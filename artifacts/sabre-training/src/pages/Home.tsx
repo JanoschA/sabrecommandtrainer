@@ -9,7 +9,6 @@ import { useSpeech } from "@/hooks/use-speech";
 import {
   History,
   Play,
-  Swords,
   ChevronDown,
   ListChecks,
   Settings2,
@@ -279,6 +278,8 @@ const DEMO_SEQUENCE: ReadonlyArray<{ moveId: (typeof FEATURED_MOVES)[number]["id
   { moveId: "zurueck" },
 ] as const;
 
+const HERO_BACKGROUND_IMAGE = "background.jpg";
+
 export default function Home() {
   const { language, speechVolume } = useTrainingStore();
   const [isDemoPlaying, setIsDemoPlaying] = useState(false);
@@ -479,15 +480,22 @@ export default function Home() {
     <div className="relative w-full bg-background">
       <section className="relative min-h-screen flex flex-col items-center justify-center overflow-hidden">
         <div
-          className="absolute inset-0 z-0 opacity-35 mix-blend-overlay"
+          className="absolute inset-0 z-0 pointer-events-none opacity-78"
           style={{
-            backgroundImage: `url(${import.meta.env.BASE_URL}images/hero-fencing.png)`,
+            backgroundImage: `url(${import.meta.env.BASE_URL}images/${HERO_BACKGROUND_IMAGE})`,
             backgroundSize: "cover",
-            backgroundPosition: "center",
+            backgroundPosition: "68% center",
           }}
         />
-        <div className="absolute inset-0 z-0 bg-gradient-to-t from-background via-background/70 to-transparent" />
-        <div className="absolute inset-0 z-0 bg-gradient-to-r from-background via-transparent to-background" />
+        <div className="absolute inset-0 z-0 pointer-events-none opacity-20 mix-blend-screen">
+          <div className="absolute right-[12%] top-[18%] w-32 md:w-44 text-white/18">
+            <HomeMoveFigure moveId="engarde" />
+          </div>
+        </div>
+        <div className="absolute inset-0 z-0 bg-gradient-to-t from-background via-background/68 to-background/10" />
+        <div className="absolute inset-0 z-0 bg-gradient-to-r from-background via-background/28 to-background/76" />
+        <div className="absolute inset-0 z-0 bg-[radial-gradient(circle_at_62%_42%,transparent_0%,rgba(8,10,20,0.08)_24%,rgba(8,10,20,0.62)_82%)]" />
+        <div className="absolute inset-0 z-0 bg-[linear-gradient(180deg,rgba(8,10,20,0.1)_0%,rgba(8,10,20,0.24)_32%,rgba(8,10,20,0.58)_100%)]" />
 
         <header className="absolute top-0 w-full p-6 flex justify-end z-20">
           <LanguageToggle />
@@ -499,12 +507,8 @@ export default function Home() {
           transition={{ duration: 0.8, ease: "easeOut" }}
           className="relative z-10 flex flex-col items-center text-center px-4 max-w-3xl"
         >
-          <div className="mb-6 p-4 bg-primary/10 rounded-full border border-primary/20 backdrop-blur-md">
-            <Swords className="w-12 h-12 text-primary" />
-          </div>
-
           <h1
-            className={`max-w-4xl text-5xl md:text-7xl text-white mb-6 leading-[1.14] md:leading-[1.08] ${heroTitleClass}`}
+            className={`max-w-4xl text-5xl md:text-7xl text-white mb-6 leading-[1.14] md:leading-[1.08] drop-shadow-[0_8px_30px_rgba(0,0,0,0.28)] ${heroTitleClass}`}
           >
             {heroTitle}
           </h1>
