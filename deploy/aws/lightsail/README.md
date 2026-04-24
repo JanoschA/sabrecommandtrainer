@@ -3,7 +3,8 @@
 This setup is intentionally minimal:
 
 - one Ubuntu Lightsail instance
-- one Docker container that serves both the frontend and the API
+- one app container that serves both the frontend and the API
+- one Caddy container that handles HTTPS and reverse-proxies to the app
 - one GitHub Actions workflow that builds the image on GitHub
 - Lightsail only pulls the finished image and redeploys it on every push to `master`
 
@@ -13,10 +14,22 @@ Create a small Ubuntu Lightsail instance and make sure the IPv4 firewall include
 
 - `SSH` / TCP / `22`
 - `HTTP` / TCP / `80`
-
-You can keep `443` for later, but it is not required for the first deploy.
+- `HTTPS` / TCP / `443`
 
 Attach a static IP if you want the server address to stay stable after stop/start cycles.
+
+## 1a. Point your domain to the static IP
+
+For the checked-in HTTPS setup to work, your DNS must already point to the Lightsail instance.
+
+This repository currently expects these production hostnames in [Caddyfile](./Caddyfile):
+
+- `sabrecommandtrainer.com`
+- `www.sabrecommandtrainer.com`
+
+Create DNS records so both names resolve to the instance's static IPv4 address.
+
+If you later want to use a different domain, update the Caddyfile in the repo and redeploy.
 
 ## 2. Prepare the server
 
@@ -57,7 +70,24 @@ docker --version
 docker compose version
 ```
 
-## 3. Optional cloud-init
+## 3. Automatic HTTPS with Caddy
+
+The deployment now starts two services:
+
+- `app` on internal Docker port `3000`
+- `caddy` on public ports `80` and `443`
+
+Caddy reads [Caddyfile](./Caddyfile), requests free TLS certificates automatically, renews them, redirects HTTP to HTTPS, and proxies traffic to `app:3000`.
+
+As long as:
+
+- DNS points to the server
+- ports `80` and `443` are open
+- the domain names in the Caddyfile are correct
+
+HTTPS should come up automatically without extra certificate costs.
+
+## 4. Optional cloud-init
 
 If you want to bootstrap future instances automatically, you can use [cloud-init.yaml](./cloud-init.yaml).
 
@@ -67,7 +97,7 @@ It now only installs Docker and prepares `/opt/fechttrainer`, without touching U
 2. verify SSH works
 3. use the cloud-init file only for later recreations if you want faster setup
 
-## 4. Configure GitHub Secrets
+## 5. Configure GitHub Secrets
 
 Add these repository secrets:
 
@@ -110,7 +140,7 @@ Then save the token as the `GHCR_TOKEN` repository secret and your GitHub userna
 
 If your GHCR package stays private, the server needs those credentials permanently to pull updates.
 
-## 5. Deployment flow
+## 6. Deployment flow
 
 On every push to `master`, GitHub Actions will:
 
@@ -124,22 +154,25 @@ The server then:
 
 - logs into GHCR if credentials are present
 - pulls the new image
-- restarts the container
+- starts or updates the app container
+- starts or updates the Caddy container
 - serves `/api/*` through Express
 - serves the built frontend from the same process
+- exposes the site through Caddy on HTTP and HTTPS
 
-## 6. Runtime notes
+## 7. Runtime notes
 
-- The app is exposed on port `80`
+- The public entrypoint is Caddy on ports `80` and `443`
+- The app itself stays internal on Docker port `3000`
 - The frontend and backend run on the same origin
 - The contact form uses the production SMTP and Turnstile secrets from GitHub Actions
 - The GitHub workflow runs on pushes to `master`, so a local commit alone does not deploy anything until it is pushed
 - This setup is much friendlier to small Lightsail instances because Docker builds no longer run on the server
+- Caddy stores certificates and ACME state in persistent Docker volumes
 
-## 7. Later improvements
+## 8. Later improvements
 
 If you want to harden it later, the next sensible steps are:
 
-- add a domain plus HTTPS reverse proxy
 - add a small backup strategy
 - switch from SSH deploys to image-based deploys

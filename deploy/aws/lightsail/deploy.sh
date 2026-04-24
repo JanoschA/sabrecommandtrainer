@@ -22,7 +22,13 @@ fi
 docker compose -f "${SCRIPT_DIR}/compose.yaml" pull
 docker compose -f "${SCRIPT_DIR}/compose.yaml" up -d --remove-orphans
 
-sleep 5
-curl --fail --silent http://127.0.0.1/api/healthz >/dev/null
+for _ in {1..20}; do
+  if curl --fail --silent -H "Host: sabrecommandtrainer.com" http://127.0.0.1/api/healthz >/dev/null; then
+    echo "Deployment completed successfully."
+    exit 0
+  fi
+  sleep 3
+done
 
-echo "Deployment completed successfully."
+echo "Deployment health check failed."
+exit 1

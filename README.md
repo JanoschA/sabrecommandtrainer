@@ -173,13 +173,15 @@ Useful options:
 For a minimal AWS setup, the repository includes a Lightsail deployment path with:
 
 - a single Docker image for frontend + API
+- a Caddy reverse proxy for automatic HTTPS
 - a Lightsail bootstrap file
 - a GitHub Actions workflow that builds the image on GitHub, pushes it to GHCR, and redeploys on pushes to `master`
 
 Recommended first-time setup:
 
 1. Create a small Ubuntu Lightsail instance
-2. Open at least ports `22` and `80` in the Lightsail firewall
+2. Open at least ports `22`, `80`, and `443` in the Lightsail firewall
+3. Point your production domain to the instance's static IP
 3. SSH into the server and install Docker manually once:
 
 ```bash
@@ -209,6 +211,13 @@ docker compose version
 6. Push to `master` to trigger the deploy workflow
 
 For GHCR access, create a GitHub personal access token (classic) with `read:packages`, store it as `GHCR_TOKEN`, and store your GitHub username as `GHCR_USERNAME`.
+
+The Lightsail deployment now uses Caddy for HTTPS. The checked-in Caddy config currently expects:
+
+- `sabrecommandtrainer.com`
+- `www.sabrecommandtrainer.com`
+
+If you later change the production domain, update [deploy/aws/lightsail/Caddyfile](deploy/aws/lightsail/Caddyfile) and redeploy.
 
 For the full Lightsail notes, including secrets and optional `cloud-init`, see [deploy/aws/lightsail/README.md](deploy/aws/lightsail/README.md).
 
