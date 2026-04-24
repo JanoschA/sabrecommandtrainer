@@ -76,11 +76,13 @@ export default function TurnstileWidget({
   onTokenChange,
   onLoadError,
 }: TurnstileWidgetProps) {
+  const wrapperRef = useRef<HTMLDivElement | null>(null);
   const containerRef = useRef<HTMLDivElement | null>(null);
   const widgetIdRef = useRef<string | null>(null);
   const onTokenChangeRef = useRef(onTokenChange);
   const onLoadErrorRef = useRef(onLoadError);
-  const [status, setStatus] = useState<"loading" | "ready" | "error">("loading");
+  const [isVisible, setIsVisible] = useState(false);
+  const [status, setStatus] = useState<"idle" | "loading" | "ready" | "error">("idle");
 
   useEffect(() => {
     onTokenChangeRef.current = onTokenChange;
@@ -91,7 +93,42 @@ export default function TurnstileWidget({
   }, [onLoadError]);
 
   useEffect(() => {
+    const element = wrapperRef.current;
+    if (!element || isVisible || typeof window === "undefined" || !("IntersectionObserver" in window)) {
+      if (!element && !isVisible) return;
+      if (!("IntersectionObserver" in window) && !isVisible) {
+        setIsVisible(true);
+      }
+      return;
+    }
+
+    const observer = new IntersectionObserver(
+      (entries) => {
+        if (entries.some((entry) => entry.isIntersecting)) {
+          setIsVisible(true);
+          observer.disconnect();
+        }
+      },
+      {
+        rootMargin: "200px 0px",
+        threshold: 0.1,
+      },
+    );
+
+    observer.observe(element);
+
+    return () => {
+      observer.disconnect();
+    };
+  }, [isVisible]);
+
+  useEffect(() => {
+    if (!isVisible) {
+      return;
+    }
+
     let cancelled = false;
+    setStatus("loading");
 
     loadTurnstileScript()
       .then(() => {
@@ -109,7 +146,7 @@ export default function TurnstileWidget({
     return () => {
       cancelled = true;
     };
-  }, []);
+  }, [isVisible]);
 
   useEffect(() => {
     if (status !== "ready" || !containerRef.current || !window.turnstile) {
@@ -141,7 +178,7 @@ export default function TurnstileWidget({
   }, [language, siteKey, status]);
 
   return (
-    <div className="space-y-3">
+    <div ref={wrapperRef} className="space-y-3">
       <div className="text-sm font-medium text-zinc-300">
         {language === "de"
           ? "Sicherheitsprüfung"
@@ -151,7 +188,7 @@ export default function TurnstileWidget({
       </div>
 
       <div className="rounded-xl border border-white/10 bg-white/[0.03] p-3">
-        {status === "loading" && (
+        {(status === "idle" || status === "loading") && (
           <div className="h-[70px] w-full animate-pulse rounded-lg bg-white/5" />
         )}
 
