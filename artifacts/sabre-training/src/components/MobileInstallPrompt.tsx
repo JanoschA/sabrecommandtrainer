@@ -1,6 +1,14 @@
 import { useEffect, useMemo, useState } from "react";
 import { Button } from "@/components/ui/button";
-import { Download, Share2, Smartphone, X } from "lucide-react";
+import {
+  Dialog,
+  DialogContent,
+  DialogDescription,
+  DialogFooter,
+  DialogHeader,
+  DialogTitle,
+} from "@/components/ui/dialog";
+import { Download, Share2, Smartphone } from "lucide-react";
 import type { Language } from "@/lib/i18n";
 
 declare global {
@@ -14,8 +22,6 @@ declare global {
     standalone?: boolean;
   }
 }
-
-const DISMISS_KEY = "mobile-install-prompt-dismissed";
 
 function isPhoneLikeDevice() {
   if (typeof window === "undefined") return false;
@@ -57,20 +63,18 @@ export function MobileInstallPrompt({ language }: { language: Language }) {
   const [isEligibleDevice, setIsEligibleDevice] = useState(false);
   const [deferredPrompt, setDeferredPrompt] = useState<BeforeInstallPromptEvent | null>(null);
   const [isStandalone, setIsStandalone] = useState(false);
-  const [isDismissed, setIsDismissed] = useState(false);
   const [isInstalling, setIsInstalling] = useState(false);
+  const [isOpen, setIsOpen] = useState(false);
 
   useEffect(() => {
     if (typeof window === "undefined") return;
 
-    const dismissed = window.localStorage.getItem(DISMISS_KEY) === "1";
     const refreshState = () => {
       setIsEligibleDevice(isPhoneLikeDevice());
       setIsStandalone(isStandaloneMode());
     };
 
     refreshState();
-    setIsDismissed(dismissed);
 
     const handleBeforeInstallPrompt = (event: Event) => {
       event.preventDefault();
@@ -80,7 +84,7 @@ export function MobileInstallPrompt({ language }: { language: Language }) {
     const handleAppInstalled = () => {
       setDeferredPrompt(null);
       setIsStandalone(true);
-      setIsDismissed(true);
+      setIsOpen(false);
     };
 
     window.addEventListener("beforeinstallprompt", handleBeforeInstallPrompt);
@@ -98,72 +102,77 @@ export function MobileInstallPrompt({ language }: { language: Language }) {
     switch (language) {
       case "fr":
         return {
+          button: "App installieren",
           title: "Ajouter l'app",
           body:
             deferredPrompt !== null
-              ? "Installez Sabre Command Trainer sur votre écran d'accueil pour l'ouvrir comme une vraie app."
+              ? "Vous pouvez installer Sabre Command Trainer sur votre écran d'accueil et l'ouvrir comme une vraie app."
               : isIosSafari()
-                ? "Dans Safari, touchez Partager puis « Sur l'écran d'accueil » pour installer l'app."
-                : "Ajoutez l'app depuis le menu du navigateur pour l'avoir sur l'écran d'accueil.",
-          action:
+                ? "Sur iPhone, ouvrez la page dans Safari puis ajoutez-la à l'écran d'accueil."
+                : "Selon le navigateur, l'installation se fait via le menu du navigateur.",
+          primary:
             deferredPrompt !== null
-              ? "Installer"
+              ? "Installer maintenant"
               : isIosSafari()
-                ? "Ouvrir Safari"
-                : "Voir comment faire",
-          iosHint: "Safari -> Partager -> Sur l'écran d'accueil",
-          androidHint: "Menu du navigateur -> Installer l'app",
+                ? "Compris"
+                : "Compris",
+          helper: isIosSafari()
+            ? "Safari -> Partager -> Sur l'écran d'accueil"
+            : "Menu du navigateur -> Installer l'app",
         };
       case "en":
         return {
+          button: "Install app",
           title: "Add the app",
           body:
             deferredPrompt !== null
-              ? "Install Sabre Command Trainer on your home screen so it opens like a real app."
+              ? "You can install Sabre Command Trainer on your home screen so it opens like a proper app."
               : isIosSafari()
-                ? "In Safari, tap Share and then “Add to Home Screen” to install the app."
-                : "Add the app from your browser menu so it lives on your home screen.",
-          action:
+                ? "On iPhone, open the site in Safari and then add it to your home screen."
+                : "Depending on the browser, installation is available from the browser menu.",
+          primary:
             deferredPrompt !== null
-              ? "Install"
+              ? "Install now"
               : isIosSafari()
-                ? "Open in Safari"
-                : "How to install",
-          iosHint: "Safari -> Share -> Add to Home Screen",
-          androidHint: "Browser menu -> Install app",
+                ? "Got it"
+                : "Got it",
+          helper: isIosSafari()
+            ? "Safari -> Share -> Add to Home Screen"
+            : "Browser menu -> Install app",
         };
       default:
         return {
+          button: "App installieren",
           title: "App hinzufügen",
           body:
             deferredPrompt !== null
-              ? "Installiere Sabre Command Trainer auf deinem Startbildschirm, damit es sich wie eine echte App öffnet."
+              ? "Du kannst Sabre Command Trainer auf deinen Startbildschirm legen und wie eine echte App öffnen."
               : isIosSafari()
-                ? "In Safari auf „Teilen“ und dann „Zum Home-Bildschirm“ tippen, um die App zu installieren."
-                : "Füge die App über das Browser-Menü hinzu, damit sie direkt auf deinem Startbildschirm liegt.",
-          action:
+                ? "Auf dem iPhone die Seite in Safari öffnen und dann zum Home-Bildschirm hinzufügen."
+                : "Je nach Browser findest du die Installation direkt im Browser-Menü.",
+          primary:
             deferredPrompt !== null
-              ? "Installieren"
+              ? "Jetzt installieren"
               : isIosSafari()
-                ? "In Safari öffnen"
-                : "So geht's",
-          iosHint: "Safari -> Teilen -> Zum Home-Bildschirm",
-          androidHint: "Browser-Menü -> App installieren",
+                ? "Verstanden"
+                : "Verstanden",
+          helper: isIosSafari()
+            ? "Safari -> Teilen -> Zum Home-Bildschirm"
+            : "Browser-Menü -> App installieren",
         };
     }
   }, [deferredPrompt, language]);
 
-  if (!isEligibleDevice || isStandalone || isDismissed) return null;
+  if (!isEligibleDevice || isStandalone) return null;
 
-  const hint = isIosSafari() ? copy.iosHint : isAndroid() ? copy.androidHint : copy.androidHint;
-
-  const handleDismiss = () => {
-    window.localStorage.setItem(DISMISS_KEY, "1");
-    setIsDismissed(true);
-  };
+  const helperIcon = isIosSafari() ? Share2 : isAndroid() ? Download : Smartphone;
+  const HelperIcon = helperIcon;
 
   const handleInstall = async () => {
-    if (!deferredPrompt) return;
+    if (!deferredPrompt) {
+      setIsOpen(false);
+      return;
+    }
 
     setIsInstalling(true);
     try {
@@ -171,6 +180,7 @@ export function MobileInstallPrompt({ language }: { language: Language }) {
       const choice = await deferredPrompt.userChoice;
       if (choice.outcome === "accepted") {
         setDeferredPrompt(null);
+        setIsOpen(false);
       }
     } finally {
       setIsInstalling(false);
@@ -178,48 +188,45 @@ export function MobileInstallPrompt({ language }: { language: Language }) {
   };
 
   return (
-    <div className="mt-4 w-full max-w-sm rounded-2xl border border-white/12 bg-white/[0.05] backdrop-blur-md px-4 py-4 text-left shadow-[0_16px_40px_rgba(0,0,0,0.22)] sm:hidden">
-      <div className="flex items-start justify-between gap-3">
-        <div className="flex items-center gap-3">
-          <div className="flex h-10 w-10 items-center justify-center rounded-xl border border-primary/25 bg-primary/10 text-primary">
-            {deferredPrompt ? <Download className="h-5 w-5" /> : <Smartphone className="h-5 w-5" />}
-          </div>
-          <div>
-            <div className="text-white font-semibold">{copy.title}</div>
-            <div className="text-[11px] uppercase tracking-[0.18em] text-zinc-500">
-              PWA
-            </div>
-          </div>
-        </div>
-        <button
-          type="button"
-          onClick={handleDismiss}
-          className="rounded-full p-1 text-zinc-500 transition-colors hover:text-white"
-          aria-label="Dismiss install prompt"
-        >
-          <X className="h-4 w-4" />
-        </button>
-      </div>
-
-      <p className="mt-3 text-sm leading-relaxed text-zinc-300">{copy.body}</p>
-
-      <div className="mt-3 rounded-xl border border-white/8 bg-black/10 px-3 py-2 text-xs text-zinc-400">
-        {isIosSafari() ? <Share2 className="mr-2 inline h-3.5 w-3.5" /> : <Download className="mr-2 inline h-3.5 w-3.5" />}
-        <span>{hint}</span>
-      </div>
-
-      {deferredPrompt ? (
+    <>
+      <div className="mt-3 sm:hidden">
         <Button
           type="button"
+          variant="ghost"
           size="sm"
-          onClick={handleInstall}
-          disabled={isInstalling}
-          className="mt-4 w-full gap-2"
+          onClick={() => setIsOpen(true)}
+          className="text-zinc-400 hover:text-white gap-2 border border-white/10 hover:border-white/25 backdrop-blur-sm bg-white/3 text-xs"
         >
-          <Download className="h-4 w-4" />
-          {isInstalling ? "..." : copy.action}
+          <Smartphone className="w-4 h-4" />
+          {copy.button}
         </Button>
-      ) : null}
-    </div>
+      </div>
+
+      <Dialog open={isOpen} onOpenChange={setIsOpen}>
+        <DialogContent className="w-[calc(100vw-2rem)] max-w-sm rounded-2xl border-white/10 bg-[#111625] text-white p-5">
+          <DialogHeader className="text-left">
+            <DialogTitle className="flex items-center gap-2 text-white">
+              <Smartphone className="h-5 w-5 text-primary" />
+              {copy.title}
+            </DialogTitle>
+            <DialogDescription className="text-zinc-300 leading-relaxed">
+              {copy.body}
+            </DialogDescription>
+          </DialogHeader>
+
+          <div className="rounded-xl border border-white/8 bg-black/15 px-3 py-3 text-sm text-zinc-300">
+            <HelperIcon className="mr-2 inline h-4 w-4 text-primary" />
+            <span>{copy.helper}</span>
+          </div>
+
+          <DialogFooter className="sm:justify-start">
+            <Button type="button" size="sm" onClick={handleInstall} disabled={isInstalling} className="w-full sm:w-auto gap-2">
+              {deferredPrompt ? <Download className="h-4 w-4" /> : <Smartphone className="h-4 w-4" />}
+              {isInstalling ? "..." : copy.primary}
+            </Button>
+          </DialogFooter>
+        </DialogContent>
+      </Dialog>
+    </>
   );
 }
