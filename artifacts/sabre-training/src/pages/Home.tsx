@@ -3,6 +3,7 @@ import { Link } from "wouter";
 import { motion } from "framer-motion";
 import { Button } from "@/components/ui/button";
 import { LanguageToggle } from "@/components/LanguageToggle";
+import { MobileInstallPrompt } from "@/components/MobileInstallPrompt";
 import { useTrainingStore } from "@/store/use-training-store";
 import { t, tDesc, tMove } from "@/lib/i18n";
 import { useSpeech } from "@/hooks/use-speech";
@@ -552,6 +553,7 @@ export default function Home() {
               </Button>
             </Link>
           </div>
+          <MobileInstallPrompt language={language} />
         </motion.div>
 
         <motion.div
