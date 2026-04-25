@@ -39,7 +39,11 @@ export default function Settings() {
   );
   const activeSelectableMoveCount = selectableMoves.filter((move) => selectedMoves.includes(move)).length;
 
-  const handleStart = () => { preloadAudio(language); initSpeech(); setLocation('/active'); };
+  const handleStart = async () => {
+    await preloadAudio(language);
+    initSpeech();
+    setLocation('/active');
+  };
 
   const durations = [5, 10, 15, 20, 30];
   const pauses = [

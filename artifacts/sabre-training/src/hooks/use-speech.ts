@@ -24,10 +24,30 @@ function pickVoice(lang: Language): SpeechSynthesisVoice | null {
 }
 
 const BASE = import.meta.env.BASE_URL ?? '/';
+const AUDIO_CACHE = 'sabre-command-audio-v1';
 
 const audioCache = new Map<string, HTMLAudioElement>();
 
-function preloadAudioFiles(lang: Language): void {
+async function persistAudioResponse(url: string): Promise<void> {
+  if (typeof window === 'undefined' || !('caches' in window)) return;
+
+  try {
+    const cache = await window.caches.open(AUDIO_CACHE);
+    const existing = await cache.match(url);
+    if (existing) return;
+
+    const response = await fetch(url, { cache: 'force-cache' });
+    if (response.ok) {
+      await cache.put(url, response.clone());
+    }
+  } catch {
+    // Best-effort only. If this fails, normal runtime fetches still work.
+  }
+}
+
+async function preloadAudioFiles(lang: Language): Promise<void> {
+  const cacheTasks: Promise<void>[] = [];
+
   for (const [baseKey, subfolder] of Object.entries(AUDIO_SUBFOLDER)) {
     const cacheKey = `${lang}:${baseKey}`;
     if (audioCache.has(cacheKey)) continue;
@@ -36,7 +56,10 @@ function preloadAudioFiles(lang: Language): void {
     audio.preload = 'auto';
     audio.load();
     audioCache.set(cacheKey, audio);
+    cacheTasks.push(persistAudioResponse(url));
   }
+
+  await Promise.allSettled(cacheTasks);
 }
 
 function tryPlayAudioFile(key: string, lang: Language, volume: number): Promise<boolean> {
@@ -196,8 +219,8 @@ export function useSpeech(language: Language, volumeRef?: React.MutableRefObject
     window.speechSynthesis.speak(u);
   }, []);
 
-  const preloadAudio = useCallback((lang: Language) => {
-    preloadAudioFiles(lang);
+  const preloadAudio = useCallback(async (lang: Language) => {
+    await preloadAudioFiles(lang);
   }, []);
 
   return { speak, stopAll, resetCancelled, initSpeech, preloadAudio };

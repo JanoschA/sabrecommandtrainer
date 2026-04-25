@@ -112,7 +112,7 @@ export default function ActiveTraining() {
   const speechVolumeRef = useRef(speechVolume);
   useEffect(() => { speechVolumeRef.current = speechVolume; }, [speechVolume]);
 
-  const { speak, stopAll, resetCancelled } = useSpeech(language, speechVolumeRef);
+  const { speak, stopAll, resetCancelled, preloadAudio } = useSpeech(language, speechVolumeRef);
   const music = useMusic();
 
   const totalSeconds = durationMinutes * 60;
@@ -155,6 +155,10 @@ export default function ActiveTraining() {
     if (isMusicOn) { music.start(); music.setVolume(musicVolume); }
     return () => { music.stop(); };
   }, []); // eslint-disable-line
+
+  useEffect(() => {
+    void preloadAudio(language);
+  }, [language, preloadAudio]);
 
   // Countdown timer — pauses when isPaused
   useEffect(() => {
