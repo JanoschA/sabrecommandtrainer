@@ -75,6 +75,21 @@ docker --version
 docker compose version
 ```
 
+### Recommended: add swap on small instances
+
+For small Lightsail instances, a swap file makes deploys much more reliable, especially when Docker has to unpack images or start multiple services.
+
+Run this once on the server:
+
+```bash
+sudo fallocate -l 2G /swapfile
+sudo chmod 600 /swapfile
+sudo mkswap /swapfile
+sudo swapon /swapfile
+echo '/swapfile none swap sw 0 0' | sudo tee -a /etc/fstab
+free -h
+```
+
 ## 3. Automatic HTTPS with Caddy
 
 The deployment now starts two services:

@@ -6,6 +6,8 @@ import Footer from "@/components/Footer";
 import { Button } from "@/components/ui/button";
 import { useTrainingStore } from "@/store/use-training-store";
 
+const DISCORD_URL = "https://discord.gg/56H8fQBxZF";
+
 interface ContactConfigResponse {
   configured?: boolean;
   turnstileSiteKey?: string | null;
@@ -336,6 +338,22 @@ interface KontaktSectionProps {
 export function KontaktSection({ asPage = false }: KontaktSectionProps) {
   const { language } = useTrainingStore();
   const apiBase = `${import.meta.env.BASE_URL.replace(/\/$/, "")}/api`;
+  const discordCopy = {
+    title: language === "de" ? "Schneller auf Discord" : language === "fr" ? "Faster on Discord" : "Faster on Discord",
+    text:
+      language === "de"
+        ? "Wenn du Fragen hast, Feedback teilen willst oder Updates mitbekommen moechtest, komm gern direkt in den JSA Forge Discord."
+        : language === "fr"
+          ? "If you have questions, want to share feedback, or want updates, join the JSA Forge Discord directly."
+          : "If you have questions, want to share feedback, or want updates, join the JSA Forge Discord directly.",
+    action: language === "de" ? "Discord beitreten" : language === "fr" ? "Join Discord" : "Join Discord",
+    secondary:
+      language === "de"
+        ? "Fuer vertrauliche Themen bleibt das Kontaktformular natuerlich der bessere Weg."
+        : language === "fr"
+          ? "For private topics, the contact form is still the better path."
+          : "For private topics, the contact form is still the better path.",
+  };
 
   return (
     <section className={asPage ? undefined : "border-t border-white/8 px-4 py-16"} id="kontakt">
@@ -349,8 +367,25 @@ export function KontaktSection({ asPage = false }: KontaktSectionProps) {
               ? "Fragen, Feedback oder Anregungen? Schreib uns gerne!"
               : language === "fr"
                 ? "Questions, retours ou suggestions? Écrivez-nous!"
-                : "Questions, feedback or suggestions? Write to us!"}
+              : "Questions, feedback or suggestions? Write to us!"}
           </p>
+        </div>
+        <div className="mb-6 rounded-2xl border border-white/10 bg-white/[0.04] p-5">
+          <div className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
+            <div className="space-y-2">
+              <h3 className="text-lg font-semibold text-white">{discordCopy.title}</h3>
+              <p className="text-sm leading-relaxed text-zinc-300">{discordCopy.text}</p>
+              <p className="text-xs text-zinc-500">{discordCopy.secondary}</p>
+            </div>
+            <a
+              href={DISCORD_URL}
+              target="_blank"
+              rel="noreferrer"
+              className="inline-flex h-11 shrink-0 items-center justify-center rounded-xl border border-[#5865F2]/35 bg-[#5865F2]/12 px-5 text-sm font-semibold text-[#B8C0FF] transition-colors hover:border-[#5865F2]/55 hover:bg-[#5865F2]/18 hover:text-white"
+            >
+              {discordCopy.action}
+            </a>
+          </div>
         </div>
         <KontaktForm apiBase={apiBase} />
       </div>

@@ -215,8 +215,19 @@ docker --version
 docker compose version
 ```
 
-6. Add the required GitHub repository secrets
-7. Push to `master` to trigger the deploy workflow
+6. On very small instances, add swap once so deploys stay stable:
+
+```bash
+sudo fallocate -l 2G /swapfile
+sudo chmod 600 /swapfile
+sudo mkswap /swapfile
+sudo swapon /swapfile
+echo '/swapfile none swap sw 0 0' | sudo tee -a /etc/fstab
+free -h
+```
+
+7. Add the required GitHub repository secrets
+8. Push to `master` to trigger the deploy workflow
 
 For GHCR access, create a GitHub personal access token (classic) with `read:packages`, store it as `GHCR_TOKEN`, and store your GitHub username as `GHCR_USERNAME`.
 
