@@ -342,14 +342,14 @@ export function KontaktSection({ asPage = false }: KontaktSectionProps) {
     title: language === "de" ? "Schneller auf Discord" : language === "fr" ? "Faster on Discord" : "Faster on Discord",
     text:
       language === "de"
-        ? "Wenn du Fragen hast, Feedback teilen willst oder Updates mitbekommen moechtest, komm gern direkt in den JSA Forge Discord."
+        ? "Wenn du Fragen hast, Feedback teilen willst oder Updates mitbekommen möchtest, komm gern direkt in den JSA Forge Discord."
         : language === "fr"
           ? "If you have questions, want to share feedback, or want updates, join the JSA Forge Discord directly."
           : "If you have questions, want to share feedback, or want updates, join the JSA Forge Discord directly.",
     action: language === "de" ? "Discord beitreten" : language === "fr" ? "Join Discord" : "Join Discord",
     secondary:
       language === "de"
-        ? "Fuer vertrauliche Themen bleibt das Kontaktformular natuerlich der bessere Weg."
+        ? "Für vertrauliche Themen bleibt das Kontaktformular natürlich der bessere Weg."
         : language === "fr"
           ? "For private topics, the contact form is still the better path."
           : "For private topics, the contact form is still the better path.",

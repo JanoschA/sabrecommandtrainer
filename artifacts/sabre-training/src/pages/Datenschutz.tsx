@@ -7,7 +7,7 @@ import { useTrainingStore } from "@/store/use-training-store";
 const LEGAL_NAME = "Janosch Schickel-Adams";
 const LEGAL_STREET = "Dorfstr. 6";
 const LEGAL_CITY = "34633 Ottrau";
-const LEGAL_EMAIL = "janosch.adams@runbox.com";
+const LEGAL_EMAIL = "contact@jsaforge.com";
 
 const content = {
   de: {
